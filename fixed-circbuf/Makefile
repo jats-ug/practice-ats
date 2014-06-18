@@ -19,7 +19,7 @@ LDFLAGS += -latslib
 all::
 
 all:: circbuf
-circbuf: circbuf.dats ; \
+circbuf: circbuf.dats circbuf.sats; \
   $(PATSCC) -D_GNU_SOURCE -DATS_MEMALLOC_LIBC $(CFLAGS) -o $@ $< $(LDFLAGS)
 regress:: circbuf ; ./circbuf
 
