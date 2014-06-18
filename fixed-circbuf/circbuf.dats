@@ -186,13 +186,13 @@ cbufObj_fini (buf) = {
   prval () = $UN.castvwtp0 (buf)
 }
 
-
-var nodes = @[int][2]()
+#define NUM_NODES 2
 var nodes_struct = @[cbuf_struct][1]()
+var nodes_dat = @[int][NUM_NODES]()
 
 implement
 main0 () = {
-  val buf = cbufObj_init (addr@nodes_struct, addr@nodes, i2sz(2))
+  val buf = cbufObj_init (addr@nodes_struct, addr@nodes_dat, i2sz(NUM_NODES))
 
   val () = cbufObj_insert<int> (buf, 1)
   val () = cbufObj_insert<int> (buf, 2)
