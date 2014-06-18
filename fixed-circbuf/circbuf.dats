@@ -167,7 +167,8 @@ cbufObj_remove
 }
 
 implement{a}
-cbufObj_init{m} (p_struct, p_node, m) = let
+cbufObj_init
+  {m} (p_struct, p_node, m) = let
   val parr = $UN.castvwtp0{ptr}(p_node)
   val pbuf = $UN.castvwtp0{cbufObj(a,m,0)}(p_struct)
   val (pfat | p) = cbufObj_takeout_struct (pbuf)
@@ -190,8 +191,7 @@ var nodes = @[int][2]()
 var nodes_struct = @[cbuf_struct][1]()
 
 implement
-main0 () =
-{
+main0 () = {
   val buf = cbufObj_init (addr@nodes_struct, addr@nodes, i2sz(2))
 
   val () = cbufObj_insert<int> (buf, 1)
