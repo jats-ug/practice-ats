@@ -113,5 +113,14 @@ cbufObj_remove
   (buf: !cbufObj (a, m, n) >> cbufObj (a, m, n-1)): (a)
 //
 (* ****** ****** *)
+//
+fun{a:vt0p}
+cbufObj_init
+  {m:pos} (p: ptr, p: ptr, m: size_t m): cbufObj (a, m, 0)
+//
+fun cbufObj_fini
+  {a:vt0p}{m:int} (buf: cbufObj (a, m, 0)): void
+//
+(* ****** ****** *)
 
 (* end of [circbuf.sats] *)

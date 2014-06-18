@@ -260,12 +260,37 @@ cbufObj_remove
 } (* end of [cbufObj_remove] *)
 
 (* ****** ****** *)
+implement{a}
+cbufObj_init{m} (p_struct, p_node, m) = let
+  val parr = $UN.castvwtp0{ptr}(p_node)
+  val pbuf = $UN.castvwtp0{cbufObj(a,m,0)}(p_struct)
+  val (pfat | p) = cbufObj_takeout_struct (pbuf)
+  val () = p->p_beg := parr
+  val () = p->m := m
+  val () = p->n := i2sz(0)
+  val () = p->f := i2sz(0)
+  prval () = cbufObj_addback_struct (pfat | pbuf)
+in
+  pbuf
+end // end [cbufObj_new]
+
+(* ****** ****** *)
+
+implement
+cbufObj_fini (buf) = {
+  prval () = $UN.castvwtp0 (buf)
+}
+
+(* ****** ****** *)
+
+var nodes = @[int][2]()
+var nodes_struct = @[cbuf_struct][1]()
 
 implement
 main0 () =
 {
 //
-val buf = cbufObj_new (i2sz(2))
+val buf = cbufObj_init (addr@nodes_struct, addr@nodes, i2sz(2))
 //
 val () = cbufObj_insert<int> (buf, 1)
 val () = cbufObj_insert<int> (buf, 2)
@@ -289,10 +314,10 @@ val () = cbufObj_insert<int> (buf, 4)
 val x = cbufObj_remove<int> (buf)
 val () = println! ("x(4) = ", x)
 //
-val ((*freed*)) = cbufObj_free (buf)
+val ((*freed*)) = cbufObj_fini (buf)
 //
 } (* end of [main0] *)
 
 (* ****** ****** *)
 
-(* end of [circbuf2.dats] *)
+(* end of [circbuf.dats] *)
