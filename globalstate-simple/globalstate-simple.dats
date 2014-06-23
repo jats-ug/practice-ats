@@ -4,16 +4,28 @@
 staload UN = "prelude/SATS/unsafe.sats"
 staload "globalstate-simple.sats"
 
-var gstate_dat: gstate_struct
+// Global value: macaddr
+typedef struct_macaddr = @[int][6]
+extern praxi addback_macaddr {l:addr} (pf: struct_macaddr @ l): void
+local
+  var _dat_macaddr: struct_macaddr // hide
+in
+  fun takeout_macaddr (): [l:addr] (struct_macaddr @ l | ptr l) = $UN.castvwtp0 (addr@_dat_macaddr)
+end
 
 implement
 main0 () = {
-  val (pf | p) = gstate_takeout_struct (addr@gstate_dat)
+  // 1st session
+  val (pf | p) = takeout_macaddr ()
   val () = p->[0] := 1
   val () = p->[1] := 2
   val () = p->[2] := 3
   val () = p->[3] := 4
   val () = p->[4] := 5
   val () = p->[5] := 6
-  prval () = gstate_addback_struct (pf)
+  prval () = addback_macaddr (pf)
+  // 2nd session
+  val (pf | p) = takeout_macaddr ()
+  val () = println! ("macaddr = ", p->[0], p->[1], p->[2], p->[3], p->[4], p->[5])
+  prval () = addback_macaddr (pf)
 }
