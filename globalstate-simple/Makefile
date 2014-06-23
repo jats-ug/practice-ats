@@ -20,7 +20,7 @@ PROGNAME=globalstate-simple
 all::
 
 all:: $(PROGNAME)
-$(PROGNAME): $(PROGNAME).dats $(PROGNAME).sats; \
+$(PROGNAME): $(PROGNAME).dats; \
   $(PATSCC) -D_GNU_SOURCE $(CFLAGS) -o $@ $<
 regress:: $(PROGNAME) ; ./$(PROGNAME)
 

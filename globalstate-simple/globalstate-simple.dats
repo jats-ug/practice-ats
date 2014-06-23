@@ -2,7 +2,6 @@
 #include "share/atspre_staload.hats"
 
 staload UN = "prelude/SATS/unsafe.sats"
-staload "globalstate-simple.sats"
 
 // Global value: macaddr
 typedef struct_macaddr = @[int][6]
