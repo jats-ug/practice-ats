@@ -6,7 +6,7 @@ See following.
 
 https://github.com/githwxi/ATS-Postiats/wiki/Design-patterns#localized-template-pattern
 
-## What's PMVtmpltcst?
+## What's "PMVtmpltcst"?
 
 ```
 $ grep git@ ../.git/config
@@ -20,6 +20,58 @@ ATSINSmove(tmpret8, PMVtmpltcst(g1int_add<S2Eextkind(atstype_int)>)(env0, ATSPMV
 ```
 
 But they are disabled by #if(0)...
+
+ATS2 compiler code says that the "PMVtmpltcst" is primitive value.
+
+```ocaml
+(* File: ATS-Postiats/src/pats_ccomp.sats *)
+datatype
+primdec_node =
+  | PMDnone of () 
+  | PMDlist of (primdeclst)
+(* --snip-- *)
+  | PMVlamfix of (int(*knd*), primval) // knd=0/1:lam/fix
+  | PMVtmpltcst of (d2cst, t2mpmarglst) // for template constants
+  | PMVtmpltvar of (d2var, t2mpmarglst) // for template variables
+  | PMVtmpltcstmat of (d2cst, t2mpmarglst, tmpcstmat) // for matched template constants
+  | PMVtmpltvarmat of (d2var, t2mpmarglst, tmpvarmat) // for matched template variables
+  | PMVerr of ()
+(* --snip-- *)
+and primval =
+'{
+  primval_loc= location
+, primval_type= hisexp
+, primval_node= primval_node
+} // end of [primval]
+(* --snip-- *)
+fun fprint_primval : fprint_type (primval)
+```
+
+```ocaml
+(* File: ATS-Postiats/src/pats_ccomp_print.dats *)
+implement
+fprint_primval (out, x) = let
+macdef prstr (s) = fprint_string (out, ,(s))
+in
+case+ x.primval_node of
+| PMVtmp (tmp) =>
+  {
+    val () = prstr "PMVtmp("
+    val () = fprint_tmpvar (out, tmp)
+    val () = prstr ")"
+  }
+(* --snip-- *)
+| PMVtmpltcst
+    (d2c, t2mas) =>
+  {
+    val () = prstr "PMVtmpltcst("
+    val () = fprint_d2cst (out, d2c)
+    val () = prstr "<"
+    val () = fpprint_t2mpmarglst (out, t2mas)
+    val () = prstr ">"
+    val () = prstr ")"
+  }
+```
 
 ## How to localize environment?
 
