@@ -88,3 +88,36 @@ Inductive ok_day : day -> Prop :=
 dataprop Ok_Day (Day) =
   | {d:Day} Okd_Gd (d) of (Good_Day d)
   | {d1,d2:Day} Okd_Before (d1) of (Ok_Day d2, Day_Before (d2, d1))
+
+(*
+Definition okdw : ok_day wednesday :=
+  okd_before wednesday thursday
+    (okd_before thursday friday
+       (okd_before friday saturday
+         (okd_gd saturday gd_sat)
+         db_sat)
+       db_fri)
+    db_thu.
+*)
+extern prfn okdw:<> Ok_Day Wednesday
+primplement okdw = let
+  prval gd_sat = Okd_Gd Gd_Sat
+  prval gd_fri = Okd_Before (gd_sat, DB_Sat)
+  prval gd_thu = Okd_Before (gd_fri, DB_Fri)
+  prval gd_wed = Okd_Before (gd_thu, DB_Thu)
+in
+  gd_wed
+end
+
+(*
+Theorem okdw' : ok_day wednesday.
+Proof.
+  apply okd_before with (d2:=thursday).
+    apply okd_before with (d2:=friday).
+      apply okd_before with (d2:=saturday).
+          apply okd_gd. apply gd_sat.
+          apply db_sat.
+      apply db_fri.
+  apply db_thu. Qed.
+*)
+(* Can't translate... *)
