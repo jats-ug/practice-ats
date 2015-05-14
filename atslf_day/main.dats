@@ -65,3 +65,26 @@ Proof. apply fdfs_any. Qed.
 *)
 extern prfn fdfs_wed:<> Fine_Day_For_Singing Wednesday
 primplement fdfs_wed = Fdfs_Any
+
+(*
+Definition fdfs_wed' : fine_day_for_singing wednesday :=
+  fdfs_any wednesday.
+
+Check fdfs_wed.
+Check fdfs_wed'.
+*)
+(* Can't translate... *)
+
+(*
+Inductive ok_day : day -> Prop :=
+  | okd_gd : forall d,
+      good_day d ->
+      ok_day d
+  | okd_before : forall d1 d2,
+      ok_day d2 ->
+      day_before d2 d1 ->
+      ok_day d1.
+*)
+dataprop Ok_Day (Day) =
+  | {d:Day} Okd_Gd (d) of (Good_Day d)
+  | {d1,d2:Day} Okd_Before (d1) of (Ok_Day d2, Day_Before (d2, d1))
