@@ -121,3 +121,12 @@ Proof.
   apply db_thu. Qed.
 *)
 (* Can't translate... *)
+
+(*
+Definition okd_before2 := forall d1 d2 d3,
+  ok_day d3 ->
+  day_before d2 d1 ->
+  day_before d3 d2 ->
+  ok_day d1.
+*)
+extern prfn okd_before2 {d1,d2,d3:Day} (Ok_Day d3, Day_Before (d2, d1), Day_Before (d3, d2)):<> Ok_Day d1
