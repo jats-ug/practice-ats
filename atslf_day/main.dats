@@ -67,14 +67,7 @@ extern prfn fdfs_wed:<> Fine_Day_For_Singing Wednesday
 primplement fdfs_wed = Fdfs_Any
 
 (*
-Definition fdfs_wed' : fine_day_for_singing wednesday :=
-  fdfs_any wednesday.
-*)
-(* Can't translate... *)
-
-(*
 Check fdfs_wed.
-Check fdfs_wed'.
 *)
 prval _ = $showtype fdfs_wed
 
@@ -113,19 +106,6 @@ in
 end
 
 (*
-Theorem okdw' : ok_day wednesday.
-Proof.
-  apply okd_before with (d2:=thursday).
-    apply okd_before with (d2:=friday).
-      apply okd_before with (d2:=saturday).
-          apply okd_gd. apply gd_sat.
-          apply db_sat.
-      apply db_fri.
-  apply db_thu. Qed.
-*)
-(* Can't translate... *)
-
-(*
 Definition okd_before2 := forall d1 d2 d3,
   ok_day d3 ->
   day_before d2 d1 ->
@@ -144,3 +124,37 @@ end
 Print okd_before2_valid.
 *)
 prval _ = $showtype okd_before2
+
+(*
+Inductive ev : nat -> Prop :=
+  | ev_0 : ev O
+  | ev_SS : forall n:nat, ev n -> ev (S (S n)).
+*)
+dataprop Ev (int) =
+  | Ev_0 (0)
+  | {n:nat} Ev_SS (n+2) of Ev n
+
+(*
+Theorem four_ev' :
+  ev 4.
+Proof.
+  (* FILL IN HERE *) Admitted.
+Definition four_ev : ev 4 :=
+  (* FILL IN HERE *) admit.
+*)
+
+(*
+Definition ev_plus4 : forall n, ev n -> ev (4 + n) :=
+  (* FILL IN HERE *) admit.
+Theorem ev_plus4' : forall n,
+  ev n -> ev (4 + n).
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+
+(*
+Theorem double_even : forall n,
+  ev (double n).
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
