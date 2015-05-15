@@ -142,6 +142,8 @@ Proof.
 Definition four_ev : ev 4 :=
   (* FILL IN HERE *) admit.
 *)
+extern prfn four_ev:<> Ev 4
+primplement four_ev = Ev_SS (Ev_SS Ev_0)
 
 (*
 Definition ev_plus4 : forall n, ev n -> ev (4 + n) :=
@@ -151,6 +153,8 @@ Theorem ev_plus4' : forall n,
 Proof.
   (* FILL IN HERE *) Admitted.
 *)
+extern prfn ev_plus4 {n:nat} (Ev n):<> Ev (4 + n)
+primplement ev_plus4 (ev_n) = Ev_SS (Ev_SS ev_n)
 
 (*
 Theorem double_even : forall n,
