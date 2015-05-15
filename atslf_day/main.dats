@@ -101,12 +101,12 @@ Definition okdw : ok_day wednesday :=
 *)
 extern prfn okdw:<> Ok_Day Wednesday
 primplement okdw = let
-  prval gd_sat = Okd_Gd Gd_Sat
-  prval gd_fri = Okd_Before (gd_sat, DB_Sat)
-  prval gd_thu = Okd_Before (gd_fri, DB_Fri)
-  prval gd_wed = Okd_Before (gd_thu, DB_Thu)
+  prval okd_sat = Okd_Gd Gd_Sat
+  prval okd_fri = Okd_Before (okd_sat, DB_Sat)
+  prval okd_thu = Okd_Before (okd_fri, DB_Fri)
+  prval okd_wed = Okd_Before (okd_thu, DB_Thu)
 in
-  gd_wed
+  okd_wed
 end
 
 (*
@@ -130,3 +130,9 @@ Definition okd_before2 := forall d1 d2 d3,
   ok_day d1.
 *)
 extern prfn okd_before2 {d1,d2,d3:Day} (Ok_Day d3, Day_Before (d2, d1), Day_Before (d3, d2)):<> Ok_Day d1
+primplement okd_before2 (okd_d3, db_d21, db_d32) = let
+  prval okd_d2 = Okd_Before (okd_d3, db_d32)
+  prval okd_d1 = Okd_Before (okd_d2, db_d21)
+in
+  okd_d1
+end
