@@ -69,11 +69,14 @@ primplement fdfs_wed = Fdfs_Any
 (*
 Definition fdfs_wed' : fine_day_for_singing wednesday :=
   fdfs_any wednesday.
+*)
+(* Can't translate... *)
 
+(*
 Check fdfs_wed.
 Check fdfs_wed'.
 *)
-(* Can't translate... *)
+prval _ = $showtype fdfs_wed
 
 (*
 Inductive ok_day : day -> Prop :=
@@ -136,3 +139,8 @@ primplement okd_before2 (okd_d3, db_d21, db_d32) = let
 in
   okd_d1
 end
+
+(*
+Print okd_before2_valid.
+*)
+prval _ = $showtype okd_before2
