@@ -202,3 +202,16 @@ prfun ev_sum {n,m:nat} .<n>. (en: Ev n, em: Ev m):<> Ev (n+m) =
   in
     ev_sum (en', em')
   end
+
+(*
+Theorem SSev_even : forall n,
+  ev (S (S n)) -> ev n.
+Proof.
+  intros n E. inversion E as [| n' E']. apply E'.  Qed.
+*)
+prfn ssev_even {n:nat} (e: Ev (n+2)):<> Ev n =
+  let
+    prval Ev_SS e' = e
+  in
+    e'
+  end
