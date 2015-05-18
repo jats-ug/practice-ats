@@ -69,7 +69,7 @@ primplement fdfs_wed = Fdfs_Any
 (*
 Check fdfs_wed.
 *)
-prval _ = $showtype fdfs_wed
+//prval _ = $showtype fdfs_wed
 
 (*
 Inductive ok_day : day -> Prop :=
@@ -123,7 +123,7 @@ end
 (*
 Print okd_before2_valid.
 *)
-prval _ = $showtype okd_before2
+//prval _ = $showtype okd_before2
 
 (*
 Inductive ev : nat -> Prop :=
@@ -304,3 +304,22 @@ prfn my_prop_ten:<> MyProp 10 = let
 in
   mp_10
 end
+
+(*
+Theorem MyProp_0 : MyProp 0.
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+prfn my_prop_0:<> MyProp 0 = let
+  prval mp_4 = MyProp1
+  prval mp_0 = MyProp3 (MyProp3 mp_4)
+in
+  mp_0
+end
+
+(*
+Theorem MyProp_plustwo : forall n:nat, MyProp n -> MyProp (S (S n)).
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+prfn my_prop_plustwo {n:nat} (mpn:MyProp n):<> MyProp (n+2) = MyProp3 (MyProp2 mpn)
