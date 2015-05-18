@@ -162,3 +162,28 @@ Theorem double_even : forall n,
 Proof.
   (* FILL IN HERE *) Admitted.
 *)
+(* xxx *)
+
+(*
+Theorem ev_minus2: forall n,
+  ev n -> ev (pred (pred n)).
+Proof.
+  intros n E.
+  destruct E as [| n' E'].
+  Case "E = ev_0". simpl. apply ev_0.
+  Case "E = ev_SS n' E'". simpl. apply E'.  Qed.
+*)
+prfn ev_minus2 {n:nat | n >= 2} (e: Ev n):<> Ev (n-2) =
+  sif n == 2 then Ev_0
+  else let
+    prval Ev_SS m = e
+  in
+    m
+  end
+(*
+extern prfn ev_minus2 {n:nat | n >= 2} (Ev n):<> Ev (n-2)
+primplement ev_minus2 (e) =
+  case+ e of
+  | Ev_SS Ev_0 => Ev_0
+  | Ev_SS m =>> m
+*)
