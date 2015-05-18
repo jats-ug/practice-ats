@@ -228,3 +228,28 @@ prfn ssssev_even {n:nat} (e: Ev (n+4)):<> Ev n =
   in
     e'
   end
+
+(*
+Theorem ev_ev_even : forall n m,
+  ev (n+m) -> ev n -> ev m.
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
+  sif n == 0 then enm
+  else let
+    prval Ev_SS en' = en
+    prval Ev_SS enm' = enm
+  in
+    ev_ev_even (enm', en')
+  end
+(*
+prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
+  case+ en of
+  | Ev_0 => enm
+  | Ev_SS en' =>> let
+    prval Ev_SS enm' = enm
+  in
+    ev_ev_even (enm', en')
+  end
+*)
