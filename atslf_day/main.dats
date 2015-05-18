@@ -253,3 +253,54 @@ prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
     ev_ev_even (enm', en')
   end
 *)
+
+(*
+Theorem ev_plus_plus : forall n m p,
+  ev (n+m) -> ev (n+p) -> ev (m+p).
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+(* xxx *)
+(*
+prfun ev_plus_plus {n,m,p:nat} .<n>. (enm: Ev (n+m), enp: Ev (n+p)):<> Ev (m+p) =
+  sif n > 0 then let
+    prval Ev_SS enm' = enm
+    prval Ev_SS enp' = enp
+  in
+    ev_plus_plus (enm', enp')
+  end else
+    ev_sum (enm, enp)
+*)
+
+(*
+Inductive MyProp : nat -> Prop :=
+  | MyProp1 : MyProp 4
+  | MyProp2 : forall n:nat, MyProp n -> MyProp (4 + n)
+  | MyProp3 : forall n:nat, MyProp (2 + n) -> MyProp n.
+*)
+dataprop MyProp (int) =
+  | MyProp1 (4)
+  | {n:nat} MyProp2 (4+n) of MyProp n
+  | {n:nat} MyProp3 (n) of MyProp (2+n)
+
+(*
+Theorem MyProp_ten : MyProp 10.
+Proof.
+  apply MyProp3. simpl.
+  assert (12 = 4 + 8) as H12.
+    Case "Proof of assertion". reflexivity.
+  rewrite -> H12.
+  apply MyProp2.
+  assert (8 = 4 + 4) as H8.
+    Case "Proof of assertion". reflexivity.
+  rewrite -> H8.
+  apply MyProp2.
+  apply MyProp1.   Qed.
+*)
+prfn my_prop_ten:<> MyProp 10 = let
+  prval mp_4 = MyProp1
+  prval mp_12 = MyProp2 (MyProp2 mp_4)
+  prval mp_10 = MyProp3 mp_12
+in
+  mp_10
+end
