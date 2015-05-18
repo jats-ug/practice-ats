@@ -215,3 +215,16 @@ prfn ssev_even {n:nat} (e: Ev (n+2)):<> Ev n =
   in
     e'
   end
+
+(*
+Theorem SSSSev_even : forall n,
+  ev (S (S (S (S n)))) -> ev n.
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+prfn ssssev_even {n:nat} (e: Ev (n+4)):<> Ev n =
+  let
+    prval Ev_SS (Ev_SS e') = e
+  in
+    e'
+  end
