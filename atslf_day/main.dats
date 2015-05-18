@@ -187,3 +187,18 @@ primplement ev_minus2 (e) =
   | Ev_SS Ev_0 => Ev_0
   | Ev_SS m =>> m
 *)
+
+(*
+Theorem ev_sum : forall n m,
+   ev n -> ev m -> ev (n+m).
+Proof.
+  (* FILL IN HERE *) Admitted.
+*)
+prfun ev_sum {n,m:nat} .<n>. (en: Ev n, em: Ev m):<> Ev (n+m) =
+  sif n == 0 then em
+  else let
+    prval Ev_SS en' = en
+    prval em' = Ev_SS em
+  in
+    ev_sum (en', em')
+  end
