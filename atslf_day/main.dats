@@ -322,4 +322,29 @@ Theorem MyProp_plustwo : forall n:nat, MyProp n -> MyProp (S (S n)).
 Proof.
   (* FILL IN HERE *) Admitted.
 *)
-prfn my_prop_plustwo {n:nat} (mpn:MyProp n):<> MyProp (n+2) = MyProp3 (MyProp2 mpn)
+prfn my_prop_plustwo {n:nat} (mpn: MyProp n):<> MyProp (n+2) = MyProp3 (MyProp2 mpn)
+
+(*
+Theorem MyProp_ev : forall n:nat,
+  ev n -> MyProp n.
+Proof.
+  intros n E.
+  induction E as [| n' E'].
+  Case "E = ev_0".
+    apply MyProp_0.
+  Case "E = ev_SS n' E'".
+    apply MyProp_plustwo. apply IHE'.  Qed.
+*)
+prfun myprop_ev {n:nat} .<n>. (e: Ev n):<> MyProp n =
+  sif n == 0 then my_prop_0
+  else let
+    prval Ev_SS (e') = e
+  in
+    my_prop_plustwo (myprop_ev e')
+  end
+(*
+prfun myprop_ev {n:nat} .<n>. (e: Ev n):<> MyProp n =
+  case+ e of
+  | Ev_0 => my_prop_0
+  | Ev_SS (e') =>> my_prop_plustwo (myprop_ev e')
+*)
