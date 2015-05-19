@@ -173,6 +173,7 @@ Proof.
   Case "E = ev_0". simpl. apply ev_0.
   Case "E = ev_SS n' E'". simpl. apply E'.  Qed.
 *)
+(*
 prfn ev_minus2 {n:nat | n >= 2} (e: Ev n):<> Ev (n-2) =
   sif n == 2 then Ev_0
   else let
@@ -180,13 +181,11 @@ prfn ev_minus2 {n:nat | n >= 2} (e: Ev n):<> Ev (n-2) =
   in
     m
   end
-(*
+*)
 extern prfn ev_minus2 {n:nat | n >= 2} (Ev n):<> Ev (n-2)
 primplement ev_minus2 (e) =
   case+ e of
-  | Ev_SS Ev_0 => Ev_0
-  | Ev_SS m =>> m
-*)
+  | Ev_SS m => m
 
 (*
 Theorem ev_sum : forall n m,
@@ -235,6 +234,7 @@ Theorem ev_ev_even : forall n m,
 Proof.
   (* FILL IN HERE *) Admitted.
 *)
+(*
 prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
   sif n == 0 then enm
   else let
@@ -243,16 +243,15 @@ prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
   in
     ev_ev_even (enm', en')
   end
-(*
+*)
 prfun ev_ev_even {n,m:nat} .<n>. (enm: Ev (n+m), en: Ev n):<> Ev m =
   case+ en of
-  | Ev_0 => enm
-  | Ev_SS en' =>> let
+  | Ev_0 () => enm
+  | Ev_SS en' => let
     prval Ev_SS enm' = enm
   in
     ev_ev_even (enm', en')
   end
-*)
 
 (*
 Theorem ev_plus_plus : forall n m p,
@@ -335,6 +334,7 @@ Proof.
   Case "E = ev_SS n' E'".
     apply MyProp_plustwo. apply IHE'.  Qed.
 *)
+(*
 prfun myprop_ev {n:nat} .<n>. (e: Ev n):<> MyProp n =
   sif n == 0 then my_prop_0
   else let
@@ -342,9 +342,16 @@ prfun myprop_ev {n:nat} .<n>. (e: Ev n):<> MyProp n =
   in
     my_prop_plustwo (myprop_ev e')
   end
-(*
+*)
 prfun myprop_ev {n:nat} .<n>. (e: Ev n):<> MyProp n =
   case+ e of
-  | Ev_0 => my_prop_0
+  | Ev_0 () => my_prop_0
   | Ev_SS (e') =>> my_prop_plustwo (myprop_ev e')
+
+(*
+Theorem ev_MyProp : forall n:nat,
+  MyProp n -> ev n.
+Proof.
+  (* FILL IN HERE *) Admitted.
 *)
+(* xxx *)
