@@ -164,6 +164,33 @@ datasort Natlist1 =
   | Ncons1 of (Natlist, int)
 
 (*
+Inductive list (X:Type) : Type :=
+  | nil : list X
+  | cons : X -> list X -> list X.
+*)
+datasort List =
+  | Nil of (List)
+  | Cons of (int, List)
+
+(*
+Inductive tree (X:Type) : Type :=
+  | leaf : X -> tree X
+  | node : tree X -> tree X -> tree X.
+*)
+datasort Tree =
+  | Leaf of (int, Tree)
+  | Node of (Tree, Tree, Tree)
+
+(*
+Inductive foo' (X:Type) : Type :=
+  | C1 : list X -> foo' X -> foo' X
+  | C2 : foo' X.
+*)
+datasort Foo' =
+  | C1 of (List, Foo', Foo')
+  | C2 of (Foo')
+
+(*
 Inductive ev : nat -> Prop :=
   | ev_0 : ev O
   | ev_SS : forall n:nat, ev n -> ev (S (S n)).
