@@ -126,6 +126,44 @@ Print okd_before2_valid.
 //prval _ = $showtype okd_before2
 
 (*
+Inductive yesno : Type :=
+  | yes : yesno
+  | no : yesno.
+*)
+datasort Yesno =
+  | Yes
+  | No
+
+(*
+Inductive rgb : Type :=
+  | red : rgb
+  | green : rgb
+  | blue : rgb.
+*)
+datasort RGB =
+  | Red
+  | Geen
+  | Blue
+
+(*
+Inductive natlist : Type :=
+  | nnil : natlist
+  | ncons : nat -> natlist -> natlist.
+*)
+datasort Natlist =
+  | Nnil
+  | Ncons of (int, Natlist)
+
+(*
+Inductive natlist1 : Type :=
+  | nnil1 : natlist1
+  | nsnoc1 : natlist1 -> nat -> natlist1.
+*)
+datasort Natlist1 =
+  | Nnil1
+  | Ncons1 of (Natlist, int)
+
+(*
 Inductive ev : nat -> Prop :=
   | ev_0 : ev O
   | ev_SS : forall n:nat, ev n -> ev (S (S n)).
@@ -353,5 +391,21 @@ Theorem ev_MyProp : forall n:nat,
   MyProp n -> ev n.
 Proof.
   (* FILL IN HERE *) Admitted.
+*)
+(* xxx *)
+(*
+prfun ev_myprop {n:nat} .<n>. (mpn: MyProp n):<> Ev n =
+  case+ mpn of
+  | MyProp1 () => four_ev
+  | MyProp2 n' => ev_plus4 (ev_myprop n')
+  | MyProp3 n' => ev_minus2 (ev_myprop n')
+*)
+
+(*
+Inductive p : (tree nat) -> nat -> Prop :=
+   | c1 : forall n, p (leaf _ n) 1
+   | c2 : forall t1 t2 n1 n2,
+            p t1 n1 -> p t2 n2 -> p (node _ t1 t2) (n1 + n2)
+   | c3 : forall t n, p t n -> p t (S n).
 *)
 (* xxx *)
