@@ -169,7 +169,7 @@ Inductive list (X:Type) : Type :=
   | cons : X -> list X -> list X.
 *)
 datasort List =
-  | Nil of (List)
+  | Nil
   | Cons of (int, List)
 
 (*
@@ -178,8 +178,8 @@ Inductive tree (X:Type) : Type :=
   | node : tree X -> tree X -> tree X.
 *)
 datasort Tree =
-  | Leaf of (int, Tree)
-  | Node of (Tree, Tree, Tree)
+  | Leaf of (int)
+  | Node of (Tree, Tree)
 
 (*
 Inductive foo' (X:Type) : Type :=
@@ -187,8 +187,8 @@ Inductive foo' (X:Type) : Type :=
   | C2 : foo' X.
 *)
 datasort Foo' =
-  | C1 of (List, Foo', Foo')
-  | C2 of (Foo')
+  | C1 of (List, Foo')
+  | C2
 
 (*
 Inductive ev : nat -> Prop :=
