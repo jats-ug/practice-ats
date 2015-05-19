@@ -435,4 +435,7 @@ Inductive p : (tree nat) -> nat -> Prop :=
             p t1 n1 -> p t2 n2 -> p (node _ t1 t2) (n1 + n2)
    | c3 : forall t n, p t n -> p t (S n).
 *)
-(* xxx *)
+dataprop P (Tree, int) =
+  | {n:nat} C1 (Leaf n, 1)
+  | {t1,t2:Tree}{n1,n2:nat} C2 (Node (t1, t2), n1+n2) of (P (t1, n1), P(t2, n2))
+  | {t:Tree}{n:nat} C3' (t, n+1) of P (t, n)
