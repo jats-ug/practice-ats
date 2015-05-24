@@ -452,6 +452,12 @@ dataprop SNOC (List, int, List) =
     SNOCcons (Cons (x0, xs1), x, Cons (x0, xs2)) of SNOC (xs1, x, xs2)
 
 dataprop
+APPEND (List, List, List) =
+  | {ys:List} APPENDnil (Nil, ys, ys) of ()
+  | {x:int} {xs:List} {ys:List} {zs:List}
+    APPENDcons (Cons (x, xs), ys, Cons (x, zs)) of APPEND (xs, ys, zs)
+
+dataprop
 REVAPP (List, List, List) =
   | {ys:List} REVAPPnil (Nil, ys, ys) of ()
   | {x:int} {xs:List} {ys:List} {zs:List}
