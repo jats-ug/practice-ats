@@ -439,3 +439,24 @@ dataprop P (Tree, int) =
   | {n:nat} C1 (Leaf n, 1)
   | {t1,t2:Tree}{n1,n2:nat} C2 (Node (t1, t2), n1+n2) of (P (t1, n1), P(t2, n2))
   | {t:Tree}{n:nat} C3' (t, n+1) of P (t, n)
+
+dataprop
+List_Eq (List, List) =
+  | List_Eq_nil (Nil, Nil)
+  | {x:int} {xs1,xs2:List}
+    List_Eq_cons (Cons (x, xs1), Cons (x, xs2)) of (List_Eq (xs1, xs2))
+
+dataprop SNOC (List, int, List) =
+  | {x:int} SNOCnil (Nil, x, Cons (x, Nil))
+  | {x0:int}{xs1:List}{x:int}{xs2:List}
+    SNOCcons (Cons (x0, xs1), x, Cons (x0, xs2)) of SNOC (xs1, x, xs2)
+
+dataprop
+REVAPP (List, List, List) =
+  | {ys:List} REVAPPnil (Nil, ys, ys) of ()
+  | {x:int} {xs:List} {ys:List} {zs:List}
+    REVAPPcons (Cons (x, xs), ys, zs) of REVAPP (xs, Cons (x, ys), zs)
+
+propdef REVERSE (xs: List, ys: List) = REVAPP (xs, Nil, ys)
+
+propdef PAL(xs: List) = REVERSE (xs, xs)
