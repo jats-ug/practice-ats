@@ -457,6 +457,8 @@ APPEND (List, List, List) =
   | {x:int} {xs:List} {ys:List} {zs:List}
     APPENDcons (Cons (x, xs), ys, Cons (x, zs)) of APPEND (xs, ys, zs)
 
+extern prfn lemma_append_assoc {xs,ys,zs,xys,yzs,xyzs1,xyzs2:List} (APPEND (xs, ys, xys), APPEND (xys, zs, xyzs1), APPEND (ys, zs, yzs), APPEND (xs, yzs, xyzs2)): List_Eq (xyzs1, xyzs2)
+
 dataprop
 REVAPP (List, List, List) =
   | {ys:List} REVAPPnil (Nil, ys, ys) of ()
