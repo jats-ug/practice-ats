@@ -469,7 +469,7 @@ propdef REVERSE (xs: List, ys: List) = REVAPP (xs, Nil, ys)
 
 propdef PAL(xs: List) = REVERSE (xs, xs)
 
-extern prfn lemma_apprev_pal {xs,xs',ys,zs:List} (REVERSE (xs, xs'), APPEND (ys, xs', zs)): PAL zs
+extern prfn lemma_apprev_pal {xs,xs',ys:List} (REVERSE (xs, xs'), APPEND (xs, xs', ys)): PAL ys
 extern prfn lemma_rev_rev {xs,xs',xs'':List} (REVERSE (xs, xs'), REVERSE (xs', xs'')): List_Eq (xs, xs'')
 extern prfn lemma_rev_append {xs,ys,zs,xs',ys',zs',yxs':List} (APPEND (xs, ys, zs), REVERSE (xs, xs'), REVERSE (ys, ys'), REVERSE (zs, zs'), APPEND (ys', xs', yxs')): List_Eq (zs', yxs')
 extern praxi List_Eq_leibniz {xs,ys:List}{f:List->List} (List_Eq (xs, ys)): List_Eq (f(xs), f(ys))
