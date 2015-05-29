@@ -24,7 +24,7 @@ Proof.
     apply IHl.
 Qed.
 *)
-
+extern prfn pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m)
 
 (*
 Theorem pal_rev : forall (X : Type) (l : list X),
