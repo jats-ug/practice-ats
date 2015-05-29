@@ -24,7 +24,22 @@ Proof.
     apply IHl.
 Qed.
 *)
-extern prfn pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m)
+prfn pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m) = let
+  prfun lemma  {l,lr,m:ilist} .<l>. (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m) =
+    case+ pf2 of
+    | APPENDnil () => let
+        prval REVAPPnil () = pf1
+      in
+        PALnil ()
+      end
+    | APPENDcons (pf2) => let
+        prval REVAPPcons (pf1) = pf1
+      in
+        lemma (pf1, pf2)
+      end
+in
+  lemma (pf1, pf2)
+end
 
 (*
 Theorem pal_rev : forall (X : Type) (l : list X),
