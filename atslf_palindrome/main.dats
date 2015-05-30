@@ -64,4 +64,26 @@ Proof.
     reflexivity.
 Qed.
 *)
-extern prfn pal_rev {l,lr:ilist} (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr)
+prfn pal_rev {l,lr:ilist} (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr) = let
+  prfun lemma {l,lr:ilist} .<l>. (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr) =
+    case+ pf1 of
+    | PALnil () => let
+        prval REVAPPnil () = pf2
+      in
+        ILISTEQ ()
+      end
+    | PALone () => let
+        prval REVAPPcons (pf2) = pf2
+        prval REVAPPnil () = pf2
+      in
+        ILISTEQ ()
+      end
+    | PALcons (pf1, pfsnoc) => let
+        prval (pfrev, pfsnoc) = lemma2_reverse_scons (pf2)
+        prval ILISTEQ () = lemma (pf1, pfrev)
+      in
+        ILISTEQ ()
+      end
+in
+  lemma (pf1, pf2)
+end
