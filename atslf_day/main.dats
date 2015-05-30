@@ -30,7 +30,7 @@ dataprop Good_Day (Day) =
 Theorem gds : good_day sunday.
 Proof. apply gd_sun. Qed.
 *)
-prfn gds: Good_Day Sunday = Gd_Sun
+prfn gds: Good_Day Sunday = Gd_Sun ()
 
 (*
 Inductive day_before : day -> day -> Prop :=
