@@ -11,6 +11,18 @@ dataprop PAL (ilist) =
   | {x:int} PALone (ilist_sing (x))
   | {x:int}{l,ll,lll:ilist} PALcons (ilist_cons (x, ll)) of (PAL (l), SNOC (l, x, ll))
 
+extern
+prfun
+lemma2_reverse_scons
+  {x:int}{xs:ilist}{ys1:ilist}
+  (REVERSE(ilist_cons(x,xs), ys1)): [ys:ilist] (REVERSE(xs, ys), SNOC(ys, x, ys1))
+
+extern
+prfun
+lemma2_append_scons
+  {x:int}{xs,ys:ilist}{ys1,zs1:ilist}
+  (APPEND(xs, ys1, zs1), SNOC(ys, x, ys1)): [zs:ilist] (APPEND(xs, ys, zs), SNOC(zs, x, zs1))
+
 (*
 Theorem pal_app : forall (X : Type) (l : list X),
   pal (l ++ rev l).
@@ -28,14 +40,14 @@ prfn pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL 
   prfun lemma  {l,lr,m:ilist} .<l>. (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m) =
     case+ pf2 of
     | APPENDnil () => let
-        prval REVAPPnil () = pf1
-      in
-        PALnil ()
+        prval REVAPPnil () = pf1 in PALnil ()
       end
-    | APPENDcons (pf2) => let
-        prval REVAPPcons (pf1) = pf1
+    | APPENDcons(pf2) => let
+        prval (pfrev, pfsnoc) = lemma2_reverse_scons (pf1)
+        prval (pfapp, pfsnoc2) = lemma2_append_scons (pf2, pfsnoc)
+        prval pfpal = lemma (pfrev, pfapp)
       in
-        lemma (pf1, pf2)
+        PALcons (pfpal, pfsnoc2)
       end
 in
   lemma (pf1, pf2)
