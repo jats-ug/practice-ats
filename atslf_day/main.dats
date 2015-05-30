@@ -23,15 +23,14 @@ Inductive good_day : day -> Prop :=
   | gd_sun : good_day sunday.
 *)
 dataprop Good_Day (Day) =
-  | Gd_Sat (Saturday)
-  | Gd_Sun (Sunday)
+  | Gd_Sat (Saturday) of ()
+  | Gd_Sun (Sunday) of ()
 
 (*
 Theorem gds : good_day sunday.
 Proof. apply gd_sun. Qed.
 *)
-extern prfn gds:<> Good_Day Sunday
-primplement gds = Gd_Sun
+prfn gds: Good_Day Sunday = Gd_Sun
 
 (*
 Inductive day_before : day -> day -> Prop :=
