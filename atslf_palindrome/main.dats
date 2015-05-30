@@ -64,3 +64,4 @@ Proof.
     reflexivity.
 Qed.
 *)
+extern prfn pal_rev {l,lr:ilist} (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr)
