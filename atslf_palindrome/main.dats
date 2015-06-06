@@ -9,7 +9,7 @@ Inductive pal {X : Type} : list X -> Prop :=
 dataprop PAL (ilist) =
   | PALnil (ilist_nil)
   | {x:int} PALone (ilist_sing (x))
-  | {x:int}{l,ll,lll:ilist} PALcons (ilist_cons (x, ll)) of (PAL (l), SNOC (l, x, ll))
+  | {x:int}{l,ll:ilist} PALcons (ilist_cons (x, ll)) of (PAL (l), SNOC (l, x, ll))
 
 extern
 prfun
@@ -64,26 +64,12 @@ Proof.
     reflexivity.
 Qed.
 *)
-prfn pal_rev {l,lr:ilist} (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr) = let
-  prfun lemma {l,lr:ilist} .<l>. (pf1: PAL (l), pf2: REVERSE (l, lr)): ILISTEQ (l, lr) =
-    case+ pf1 of
-    | PALnil () => let
-        prval REVAPPnil () = pf2
-      in
-        ILISTEQ ()
-      end
-    | PALone () => let
-        prval REVAPPcons (pf2) = pf2
-        prval REVAPPnil () = pf2
-      in
-        ILISTEQ ()
-      end
-    | PALcons (pf1, pfsnoc) => let
-        prval (pfrev, pfsnoc) = lemma2_reverse_scons (pf2)
-        prval ILISTEQ () = lemma (pf1, pfrev)
-      in
-        ILISTEQ ()
-      end
+prfn pal_rev {l:ilist} (pf: PAL (l)): REVERSE (l, l) = let
+  prfun lemma {l,lr:ilist} .<l>. (pf: PAL (l)): REVERSE (l, l) =
+    case+ pf of
+    | PALnil () => REVAPPnil ()
+    | PALone () => REVAPPcons (REVAPPnil ())
+    | PALcons (pf, pfsnoc) => lemma (pf)
 in
-  lemma (pf1, pf2)
+  lemma (pf)
 end
