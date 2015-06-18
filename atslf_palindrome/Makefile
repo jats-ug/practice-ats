@@ -2,7 +2,7 @@ PATSCC=$(PATSHOME)/bin/patscc
 PATSOPT=$(PATSHOME)/bin/patsopt
 
 all: main.dats
-	$(PATSOPT) -tc -d $<
+	$(PATSCC) $<
 
 clean:
-	rm -f *~ *_?ats.o *_?ats.c
+	rm -f *~ *_?ats.o *_?ats.c a.out
