@@ -1,6 +1,5 @@
 staload "libats/SATS/ilist_prf.sats"
 staload "libats/SATS/gflist.sats"
-staload "libats/SATS/gflist_vt.sats"
 staload "palindrome.sats"
 
 extern
@@ -34,7 +33,7 @@ end
 
 implement{a}
 pal_sing (x) = let
-  val gfl = gflist_vt_cons (x, gflist_vt_nil)
+  val gfl = gflist_cons (x, gflist_nil)
   prval pfpal = PALone ()
 in
   (pfpal | gfl)

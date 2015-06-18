@@ -1,6 +1,5 @@
 staload "libats/SATS/ilist_prf.sats"
 staload "libats/SATS/gflist.sats"
-staload "libats/SATS/gflist_vt.sats"
 
 (*
 Inductive pal {X : Type} : list X -> Prop :=
@@ -29,4 +28,4 @@ Qed.
 prfun pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL (m)
 
 fun{a:t@ype} pal_sing
-  {x:int} (x: stamped_vt (a, x)): (PAL (ilist_sing(x)) | gflist_vt (a, ilist_sing(x)))
+  {x:int} (x: stamped_t (a, x)): (PAL (ilist_sing(x)) | gflist (a, ilist_sing(x)))
