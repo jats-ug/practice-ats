@@ -32,6 +32,14 @@ in
 end
 
 implement{a}
+pal_empty () = let
+  val gfl = gflist_nil ()
+  prval pf = PALnil ()
+in
+  (pf | gfl)
+end
+
+implement{a}
 pal_sing (x) = let
   val gfl = gflist_cons (x, gflist_nil)
   prval pfpal = PALone ()
@@ -70,4 +78,11 @@ pal_append (pf | pxs, xs) = let
     end
 in
   loop (pf | pxs, xs)
+end
+
+implement{a}
+print_pal (_ | xs) = let
+  val (_ | xs) = gflist2list xs
+in
+  print_list<a> xs
 end
