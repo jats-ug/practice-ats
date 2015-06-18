@@ -36,5 +36,3 @@ fun{a:t@ype} pal_append
   [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx))
 fun{a:t@ype} print_pal
   {xs:ilist} (pf: PAL (xs) | xs: gflist (a, xs)): void
-
-overload print with print_list
