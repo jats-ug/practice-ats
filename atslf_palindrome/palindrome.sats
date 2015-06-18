@@ -29,3 +29,6 @@ prfun pal_app {l,lr,m:ilist} (pf1: REVERSE (l, lr), pf2: APPEND (l, lr, m)): PAL
 
 fun{a:t@ype} pal_sing
   {x:int} (x: stamped_t (a, x)): (PAL (ilist_sing(x)) | gflist (a, ilist_sing(x)))
+fun{a:t@ype} pal_append
+  {pxs,xs:ilist} (pf: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
+  [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx))
