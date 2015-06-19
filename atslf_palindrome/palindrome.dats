@@ -33,7 +33,7 @@ implement{a}
 pal_sing (x) = (PALone () | gflist_cons (x, gflist_nil))
 
 implement{a}
-pal_append (pf | pxs, xs) = let
+pal_pappend (pf | pxs, xs) = let
   fun loop {pxs,xs:ilist} .<xs>. (pf: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
       [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx)) =
     case+ xs of

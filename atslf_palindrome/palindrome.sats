@@ -31,7 +31,7 @@ fun{a:t@ype} pal_empty
   (): (PAL (ilist_nil) | gflist (a, ilist_nil ()))
 fun{a:t@ype} pal_sing
   {x:int} (x: stamped_t (a, x)): (PAL (ilist_sing(x)) | gflist (a, ilist_sing(x)))
-fun{a:t@ype} pal_append
+fun{a:t@ype} pal_pappend
   {pxs,xs:ilist} (pf: PAL (pxs) | pxs: gflist (INV(a), pxs), xs: gflist (a, xs)):
   [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx))
 fun{a:t@ype} print_pal
