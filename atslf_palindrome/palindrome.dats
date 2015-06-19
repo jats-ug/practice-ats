@@ -33,19 +33,21 @@ implement{a}
 pal_sing (x) = (PALone () | gflist_cons (x, gflist_nil))
 
 implement{a}
-pal_pappend (pf | pxs, xs) = let
-  fun loop {pxs,xs:ilist} .<xs>. (pf: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
-      [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx)) =
+pal_pappend (pfpal | pxs, xs) = let
+  fun loop {pxs,xs:ilist} .<xs>. (pfpal: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
+      [pxsx:ilist] (PAL (pxsx), PAPPEND (pxs, xs, pxsx) | gflist (a, pxsx)) =
     case+ xs of
-    | gflist_nil () => (pf | pxs)
+    | gflist_nil () => (pfpal, PAPPENDnil pfpal | pxs)
     | gflist_cons(x, xs1) => let
       val (pfsnoc | pxs) = gflist_snoc (pxs, x)
       val pxs = gflist_vt2t pxs
+      val (pfpalx, pfappend | pzs) = loop (PALcons (pfpal, pfsnoc) | gflist_cons (x, pxs), xs1)
+      prval pfappendx = PAPPENDcons (pfsnoc, pfappend)
     in
-      loop (PALcons (pf, pfsnoc) | gflist_cons (x, pxs), xs1)
+      (pfpalx, pfappendx | pzs)
     end
 in
-  loop (pf | pxs, xs)
+  loop (pfpal | pxs, xs)
 end
 
 implement{a}
