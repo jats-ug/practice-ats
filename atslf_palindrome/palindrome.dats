@@ -32,25 +32,6 @@ pal_empty () = (PALnil () | gflist_nil ())
 implement{a}
 pal_sing (x) = (PALone () | gflist_cons (x, gflist_nil))
 
-extern fun{a:t@ype}
-gflist_snoc {xs:ilist}{x:int}
-  (xs: gflist (a, xs), x: stamped_t (a, x)): [xsx:ilist] (SNOC (xs, x, xsx) | gflist (a, xsx))
-
-implement{a}
-gflist_snoc {xs}{x} (xs, x) = let
-  fun loop {xs:ilist}{x:int} .<xs>. (xs: gflist (a, xs), x: stamped_t (a, x)):
-      [xsx:ilist] (SNOC (xs, x, xsx) | gflist (a, xsx)) =
-    case+ xs of
-    | gflist_nil () => (SNOCnil () | gflist_cons (x, gflist_nil))
-    | gflist_cons (x1, xs1) => let
-      val (pfsnoc | xs2) = loop (xs1, x)
-    in
-      (SNOCcons pfsnoc | gflist_cons (x1, xs2))
-    end
-in
-  loop (xs, x)
-end
-
 implement{a}
 pal_append (pf | pxs, xs) = let
   fun loop {pxs,xs:ilist} .<xs>. (pf: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
@@ -59,6 +40,7 @@ pal_append (pf | pxs, xs) = let
     | gflist_nil () => (pf | pxs)
     | gflist_cons(x, xs1) => let
       val (pfsnoc | pxs) = gflist_snoc (pxs, x)
+      val pxs = gflist_vt2t pxs
     in
       loop (PALcons (pf, pfsnoc) | gflist_cons (x, pxs), xs1)
     end
