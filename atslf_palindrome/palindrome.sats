@@ -32,7 +32,7 @@ fun{a:t@ype} pal_empty
 fun{a:t@ype} pal_sing
   {x:int} (x: stamped_t (a, x)): (PAL (ilist_sing(x)) | gflist (a, ilist_sing(x)))
 fun{a:t@ype} pal_append
-  {pxs,xs:ilist} (pf: PAL (pxs) | pxs: gflist (a, pxs), xs: gflist (a, xs)):
+  {pxs,xs:ilist} (pf: PAL (pxs) | pxs: gflist (INV(a), pxs), xs: gflist (a, xs)):
   [pxsx:ilist] (PAL (pxsx) | gflist (a, pxsx))
 fun{a:t@ype} print_pal
-  {xs:ilist} (pf: PAL (xs) | xs: gflist (a, xs)): void
+  {xs:ilist} (pf: PAL (xs) | xs: gflist (INV(a), xs)): void
