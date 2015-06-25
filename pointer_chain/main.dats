@@ -39,8 +39,12 @@ end
 implement main0 () = {
   var f: f_statfs?
   val b = dentry2statfs (get_dentry_p (), f)
-  val _ = if b then let prval () = opt_unsome (f)
-                    in f (get_dentry_p ()) end
-               else let prval () = opt_unnone (f)
-                    in 0 end
+  val _ = if b then let
+                      prval () = opt_unsome (f)
+                      val res = f (get_dentry_p ())
+                      prval () = topize(f)
+                    in
+                      res
+                    end
+               else let prval () = opt_unnone (f) in 0 end
 }
