@@ -14,3 +14,4 @@ struct dentry {
 
 int simple_statfs(struct dentry *dentry);
 struct dentry *get_dentry_p(void);
+struct dentry *get_dentry_p_null(void);

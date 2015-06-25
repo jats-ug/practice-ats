@@ -13,10 +13,14 @@ abst@ype dentry_t  = $extype"struct dentry"
 typedef dentry_t_p = cPtr0(dentry_t)
 
 extern fun get_dentry_p (): dentry_t_p = "mac#"
+extern fun get_dentry_p_null (): dentry_t_p = "mac#"
 extern fun dentry2s_op_statfs (dentry_t_p): (dentry_t_p -> int) = "mac#"
 
 implement main0 () = {
   val de = get_dentry_p ()
   val f = dentry2s_op_statfs de
   val _ = f de
+  val denull = get_dentry_p_null ()
+  val f = dentry2s_op_statfs denull
+  val _ = f denull
 }
