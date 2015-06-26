@@ -1,3 +1,6 @@
+#include "share/atspre_define.hats"
+#include "share/atspre_staload.hats"
+
 staload UN = "prelude/SATS/unsafe.sats"
 
 %{^
@@ -44,7 +47,7 @@ implement main0 () = {
               val res = f (get_dentry_p ())
               prval () = topize(f)
             in res end
-          else let prval () = opt_unnone (f) in 1 end
+          else let prval () = opt_unnone (f) in ~1 end
   val () = (print "r = "; print_int r; print "\n")
   // Fail to get function pointer
   val r = if dentry2statfs (get_dentry_p_null (), f) then let
@@ -52,6 +55,6 @@ implement main0 () = {
               val res = f (get_dentry_p ())
               prval () = topize(f)
             in res end
-          else let prval () = opt_unnone (f) in 1 end
+          else let prval () = opt_unnone (f) in ~1 end
   val () = (print "r = "; print_int r; print "\n")
 }
