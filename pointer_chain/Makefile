@@ -1,7 +1,7 @@
 PATSCC=$(PATSHOME)/bin/patscc
 PATSOPT=$(PATSHOME)/bin/patsopt
 
-all: main.dats dentry.c dentry.h
+all:
 	$(PATSCC) main.dats dentry.c
 
 clean:
