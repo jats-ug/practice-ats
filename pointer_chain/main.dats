@@ -6,7 +6,7 @@ staload UN = "prelude/SATS/unsafe.sats"
 typedef int (*s_op_statfs) (struct dentry *);
 
 s_op_statfs
-dentry2s_op_statfs(struct dentry *dentry) {
+trace_dentry2statfs(struct dentry *dentry) {
 	return dentry->d_sb->s_op->statfs;
 }
 %}
@@ -20,8 +20,8 @@ extern fun get_dentry_p_null (): dentry_t_p = "mac#"
 
 fun{}
 dentry2statfs (dentry: dentry_t_p, statfs: &f_statfs? >> opt (f_statfs, b)): #[b:bool] bool(b) = let
-  extern fun dentry2s_op_statfs (dentry_t_p): f_statfs = "mac#"
-  val f = dentry2s_op_statfs dentry
+  extern fun trace_dentry2statfs (dentry_t_p): f_statfs = "mac#"
+  val f = trace_dentry2statfs dentry
 in
   if $UN.cast{ptr}(f) = the_null_ptr then let
       prval () = opt_none{f_statfs}(statfs)
@@ -39,12 +39,24 @@ end
 implement main0 () = {
   var f: f_statfs?
   val b = dentry2statfs (get_dentry_p (), f)
-  val _ = if b then let
+  val r = if b then let
                       prval () = opt_unsome (f)
                       val res = f (get_dentry_p ())
                       prval () = topize(f)
                     in
                       res
                     end
-               else let prval () = opt_unnone (f) in 0 end
+               else let prval () = opt_unnone (f) in 1 end
+  val () = (print "r = "; print_int r; print "\n")
+  var f: f_statfs?
+  val b = dentry2statfs (get_dentry_p_null (), f)
+  val r = if b then let
+                      prval () = opt_unsome (f)
+                      val res = f (get_dentry_p_null ())
+                      prval () = topize(f)
+                    in
+                      res
+                    end
+               else let prval () = opt_unnone (f) in 1 end
+  val () = (print "r = "; print_int r; print "\n")
 }
