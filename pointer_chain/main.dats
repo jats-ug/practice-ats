@@ -39,25 +39,19 @@ end
 implement main0 () = {
   var f: f_statfs?
   // Success to get function pointer
-  val b = dentry2statfs (get_dentry_p (), f)
-  val r = if b then let
-                      prval () = opt_unsome (f)
-                      val res = f (get_dentry_p ())
-                      prval () = topize(f)
-                    in
-                      res
-                    end
-               else let prval () = opt_unnone (f) in 1 end
+  val r = if dentry2statfs (get_dentry_p (), f) then let
+              prval () = opt_unsome (f)
+              val res = f (get_dentry_p ())
+              prval () = topize(f)
+            in res end
+          else let prval () = opt_unnone (f) in 1 end
   val () = (print "r = "; print_int r; print "\n")
   // Fail to get function pointer
-  val b = dentry2statfs (get_dentry_p_null (), f)
-  val r = if b then let
-                      prval () = opt_unsome (f)
-                      val res = f (get_dentry_p_null ())
-                      prval () = topize(f)
-                    in
-                      res
-                    end
-               else let prval () = opt_unnone (f) in 1 end
+  val r = if dentry2statfs (get_dentry_p_null (), f) then let
+              prval () = opt_unsome (f)
+              val res = f (get_dentry_p ())
+              prval () = topize(f)
+            in res end
+          else let prval () = opt_unnone (f) in 1 end
   val () = (print "r = "; print_int r; print "\n")
 }
