@@ -9,10 +9,10 @@ vtypedef super_operations_t = $extype_struct"struct super_operations" of {
   statfs= f_statfs
 }
 vtypedef super_block_t = $extype_struct"struct super_block" of {
-  s_op= {l:addr}(super_operations_t@l | ptr(l))
+  s_op= [l:addr](super_operations_t@l | ptr(l))
 }
 vtypedef dentry_t = $extype_struct"struct dentry" of {
-  d_sb= {l:addr}(super_block_t@l | ptr(l))
+  d_sb= [l:addr](super_block_t@l | ptr(l))
 }
 
 extern fun get_dentry_p (): [l:addr] (dentry_t@l | ptr(l)) = "mac#"
