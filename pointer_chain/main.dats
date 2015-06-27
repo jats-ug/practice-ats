@@ -22,7 +22,7 @@ extern fun get_dentry_p (): dentry_t_p = "mac#"
 extern fun get_dentry_p_null (): dentry_t_p = "mac#"
 extern fun trace_dentry2statfs (dentry_t_p): f_statfs = "mac#"
 
-fun{s,f:type}
+fun{s,f:t@ype}
 tracestruct (from: s, trace: (s -> f), function: &f? >> opt (f, b)): #[b:bool] bool(b) = let
   val f = trace from
 in
