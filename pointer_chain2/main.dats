@@ -1,6 +1,10 @@
 #include "share/atspre_define.hats"
 #include "share/atspre_staload.hats"
 
+%{^
+#include "dentry.h"
+%}
+
 staload UN = "prelude/SATS/unsafe.sats"
 
 typedef f_statfs = ptr -> int
