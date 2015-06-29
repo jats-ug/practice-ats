@@ -23,7 +23,16 @@ extern fun get_dentry_p (): [l:addr] (dentry_t@l | ptr(l)) = "mac#"
 extern fun get_dentry_p_null (): [l:addr] (dentry_t@l | ptr(l)) = "mac#"
 
 implement main0 () = {
+  // Success to get function pointer
   val (pfdentry | dentry) = get_dentry_p ()
+  val (pfsb | sb) = dentry->d_sb
+  val (pfsop | sop) = sb->s_op
+  val _ = sop->statfs dentry
+  val _ = $UN.castvwtp0{ptr}((pfsop | sop))
+  val _ = $UN.castvwtp0{ptr}((pfsb | sb))
+  val _ = $UN.castvwtp0{ptr}((pfdentry | dentry))
+  // Fail to get function pointer
+  val (pfdentry | dentry) = get_dentry_p_null ()
   val (pfsb | sb) = dentry->d_sb
   val (pfsop | sop) = sb->s_op
   val _ = sop->statfs dentry
