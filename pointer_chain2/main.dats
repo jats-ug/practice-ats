@@ -22,12 +22,16 @@ vtypedef dentry_t = $extype_struct"struct dentry" of {
 extern fun get_dentry_p (): [l:addr] (dentry_t@l | ptr(l)) = "mac#"
 extern fun get_dentry_p_null (): [l:addr] (dentry_t@l | ptr(l)) = "mac#"
 
+fun{f:t@ype}
+check_envlessfunc (function: f): bool =
+  if $UN.cast{ptr}(function) = the_null_ptr then false else true
+
 implement main0 () = {
   // Success to get function pointer
   val (pfdentry | dentry) = get_dentry_p ()
   val (pfsb | sb) = dentry->d_sb
   val (pfsop | sop) = sb->s_op
-  val _ = sop->statfs dentry
+  val _ = if check_envlessfunc sop->statfs then sop->statfs dentry else ~1
   val _ = $UN.castvwtp0{ptr}((pfsop | sop))
   val _ = $UN.castvwtp0{ptr}((pfsb | sb))
   val _ = $UN.castvwtp0{ptr}((pfdentry | dentry))
@@ -35,7 +39,7 @@ implement main0 () = {
   val (pfdentry | dentry) = get_dentry_p_null ()
   val (pfsb | sb) = dentry->d_sb
   val (pfsop | sop) = sb->s_op
-  val _ = sop->statfs dentry
+  val _ = if check_envlessfunc sop->statfs then sop->statfs dentry else ~1
   val _ = $UN.castvwtp0{ptr}((pfsop | sop))
   val _ = $UN.castvwtp0{ptr}((pfsb | sb))
   val _ = $UN.castvwtp0{ptr}((pfdentry | dentry))
