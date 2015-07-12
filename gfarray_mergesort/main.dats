@@ -25,5 +25,7 @@ end
 
 implement main0 () = {
   val (pflen, pfarr | arr) = arr_takeout ()
-  val () = arr_addback (pfarr | arr)
+  prval nth0 = NTHbas ()
+  val v = gfarray_get_at (nth0, pfarr | arr, i2sz 0)
+//  val () = arr_addback (pfarr | arr)
 }
