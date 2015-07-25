@@ -24,8 +24,8 @@ end
 
 fun{a:viewt@ype}
 print_arr (arr: !arrayptr (INV(a), N)):void = {
-  implement array_foreach$fwork<int><int> (x, env) = env := (print x; 0)
-  val _ = arrayptr_foreach (arr, i2sz N)
+  implement array_foreach$fwork<int><void> (x, env) = print x
+  val _ = arrayptr_foreach<a> (arr, i2sz N)
 }
 
 implement main0 () = {
