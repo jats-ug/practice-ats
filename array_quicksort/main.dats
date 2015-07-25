@@ -8,7 +8,10 @@ staload _ = "prelude/DATS/array.dats"
 #define N 3
 
 implement main0 () = {
-  var arr = @[int](5, 4, 3)
+  var arr = @[int][N](0)
+  val () = arr[0] := 3
+  val () = arr[1] := 2
+  val () = arr[2] := 1
   implement array_quicksort$cmp<int> (x, y) = compare (x, y)
   val () = array_quicksort<int> (arr, i2sz N)
 }
