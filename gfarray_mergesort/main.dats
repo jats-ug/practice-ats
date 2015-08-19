@@ -8,6 +8,20 @@ staload UN = "prelude/SATS/unsafe.sats"
 
 #define ARRAY_SIZE 16
 
+extern fun{a:vt0p}
+gfarray_mergesort
+  {xs1:ilist}{xs2:ilist}{n:int}{l:addr}
+(
+  LENGTH(xs1, n)
+, !gfarray_v(a, l, xs1) >> gfarray_v(a, l, xs2)
+| p: ptr(l), s: size_t n
+) : #[xs2:ilist] (SORT(xs1, xs2) | (*void*))
+
+extern fun{a:vt0p}
+gfarray_mergesort$cmp
+  {x1,x2:int}
+  (x1: &stamped_vt (a, x1), x2: &stamped_vt (a, x2)): int(sgn(x1-x2))
+
 implement main0 () = {
   // Init array
   var arr = @[int][ARRAY_SIZE](0)
