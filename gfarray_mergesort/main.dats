@@ -25,7 +25,7 @@ lemma_perm
 
 extern fun{a:vt0p}
 gfarray_mergesort
-  {l:addr}{xs1:ilist}{xs2:ilist}{n:int}
+  {l:addr}{xs1:ilist}{n:nat}
 (
   pflen: LENGTH(xs1, n)
 , pfarr: gfarray_v(a, l, xs1)
@@ -60,7 +60,7 @@ merge
 ) : [xs:ilist] (UNION (xs1, xs2, xs), ISORD (xs), gfarray_v (a, l, xs) | (*void*))
 
 implement{a}
-gfarray_mergesort{l}{xs1}{xs2}{n}
+gfarray_mergesort{l}{xs}{n}
 (pflen, pfarr | p, n) =
   if n >= 2 then let
     val [n2:int] n2 = halfsize (n)
@@ -71,6 +71,8 @@ gfarray_mergesort{l}{xs1}{xs2}{n}
     prval (pford_xs1, pfperm_xs1) = sort_elim (pfsort_xs1)
     val (pfsort_xs2, pfarr_xs2 | (*void*)) = gfarray_mergesort (pflen_xs2, pfarr_xs2 | p2, n-n2)
     prval (pford_xs2, pfperm_xs2) = sort_elim (pfsort_xs2)
+    prval pflen_xs1 = lemma_permute_length(pfperm_xs1, pflen_xs1)
+    prval pflen_xs2 = lemma_permute_length(pfperm_xs2, pflen_xs2)
     val (pfuni, pford, pfarr | (*void*)) =
       merge (pflen_xs1, pford_xs1, pford_xs2, pfarr_xs1, pfarr_xs2 | p, p2)
     prval pfperm = lemma_perm (pfapp_xs1_xs2, pfperm_xs1, pfperm_xs2, pfuni)
