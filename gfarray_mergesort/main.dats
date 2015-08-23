@@ -13,11 +13,10 @@ UNION (
   ys1: ilist, ys2: ilist, res: ilist
 ) (* end of [absprop] *)
 
-extern
-prfun
+extern prfun
 lemma_perm
-{xs1,xs2:ilist}{xs:ilist}
-{ys1,ys2:ilist}{ys:ilist}
+  {xs1,xs2:ilist}{xs:ilist}
+  {ys1,ys2:ilist}{ys:ilist}
 (
   APPEND (xs1, xs2, xs)
 , PERMUTE (xs1, ys1), PERMUTE (xs2, ys2), UNION (ys1, ys2, ys)
@@ -49,14 +48,14 @@ prfun sort_nilsing
 // xxx Not yet
 extern fun{a:vt0p}
 merge
-  {l:addr}{xs1,xs2:ilist}{n1:int}
+  {l:addr}{xs1,xs2:ilist}{n1:nat}
 (
   pflen_xs1: LENGTH (xs1, n1)
 , pford_xs1: ISORD (xs1)
 , pford_xs2: ISORD (xs2)
 , pfarr1: gfarray_v (a, l, xs1)
 , pfarr2: gfarray_v (a, l+n1*sizeof(a), xs2)
-| p1: ptr(l), p2: ptr(l+n1*sizeof(a))
+| p1: ptr(l), p2: ptr(l+n1*sizeof(a)), n1: size_t n1
 ) : [xs:ilist] (UNION (xs1, xs2, xs), ISORD (xs), gfarray_v (a, l, xs) | (*void*))
 
 implement{a}
@@ -68,13 +67,13 @@ gfarray_mergesort{l}{xs}{n}
       gfarray_v_split {a}{..}{..}{..}{n2} (pflen, pfarr)
     val p2 = ptr_add (p, n2)
     val (pfsort_xs1, pfarr_xs1 | (*void*)) = gfarray_mergesort (pflen_xs1, pfarr_xs1 | p, n2)
-    prval (pford_xs1, pfperm_xs1) = sort_elim (pfsort_xs1)
     val (pfsort_xs2, pfarr_xs2 | (*void*)) = gfarray_mergesort (pflen_xs2, pfarr_xs2 | p2, n-n2)
+    prval (pford_xs1, pfperm_xs1) = sort_elim (pfsort_xs1)
     prval (pford_xs2, pfperm_xs2) = sort_elim (pfsort_xs2)
     prval pflen_xs1 = lemma_permute_length(pfperm_xs1, pflen_xs1)
     prval pflen_xs2 = lemma_permute_length(pfperm_xs2, pflen_xs2)
     val (pfuni, pford, pfarr | (*void*)) =
-      merge (pflen_xs1, pford_xs1, pford_xs2, pfarr_xs1, pfarr_xs2 | p, p2)
+      merge (pflen_xs1, pford_xs1, pford_xs2, pfarr_xs1, pfarr_xs2 | p, p2, n2)
     prval pfperm = lemma_perm (pfapp_xs1_xs2, pfperm_xs1, pfperm_xs2, pfuni)
     prval pfsrt = sort_make (pford, pfperm)
   in
