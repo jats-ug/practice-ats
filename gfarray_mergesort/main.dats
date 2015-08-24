@@ -22,25 +22,6 @@ lemma_perm
 , PERMUTE (xs1, ys1), PERMUTE (xs2, ys2), UNION (ys1, ys2, ys)
 ) : PERMUTE (xs, ys)
 
-prfun
-lemma_nth {n:int} = let
-  prfun lemma {n:int} .<n>.  =
-    sif n > 0 then NTHind (lemma {n-1})
-      else NTHbas ()
-in
-  lemma {n}
-end
-
-(*
-primplement
-lemma_nth {xs}{n} = let
-  prfun lemma .<n>. {xs:ilist}{n:int}: [x0:int] NTH(x0, xs, n) =
-    sif n > 0 then 
-in
-  lemma {xs}{n}
-end
-*)
-
 extern fun{a:vt0p}
 gfarray_mergesort
   {l:addr}{xs1:ilist}{n:nat}
@@ -104,13 +85,10 @@ implement main0 () = {
   // Init array
   var arr = @[int][ARRAY_SIZE](0)
   vtypedef VT = [xs:ilist](LENGTH(xs, ARRAY_SIZE), gfarray_v(int, arr, xs) | ptr(arr))
-  val (pflen, pfarr | arr) = $UN.castvwtp0{VT}(addr@arr)
+  val [xs:ilist] (pflen, pfarr | arr) = $UN.castvwtp0{VT}(addr@arr)
   // Access array
-  #define N 1
-  prval nth = lemma_nth {N}
-  prval nth = NTHind (NTHbas ())
-  prval _ = $showtype nth
-  prval LENGTHcons (LENGTHcons _) = pflen
+  #define N 15
+  prval nth = lemma_length_nth {xs}{..}{N} (pflen)
   val v = gfarray_get_at (nth, pfarr | arr, i2sz(N))
   val () = println! ("gfarray[0] = ", unstamp_t{int}(v))
   // Finish array
