@@ -80,7 +80,9 @@ extern fun{a:t0p}
 findindex
   {l:addr}{x:int}{xs:ilist}{n:nat}
 (
-  pfarr: !gfarray_v (a, l, xs)
+  pflen: LENGTH (xs, n)
+, pford: ISORD (xs)
+, pfarr: !gfarray_v (a, l, xs)
 | p: ptr(l), v: stamped_t (a, x)
 ) : [n2:nat | n2 <= n] size_t (n2)
 
@@ -90,7 +92,7 @@ swap
   {l:addr}{xs1,xs2:ilist}{n1,n2:nat}
 (
   pflen_xs1: LENGTH (xs1, n1)
-, pflen_xs2: LENGTH (xs1, n2)
+, pflen_xs2: LENGTH (xs2, n2)
 , pfarr1: gfarray_v (a, l, xs1)
 , pfarr2: gfarray_v (a, l+n1*sizeof(a), xs2)
 | p1: ptr(l), p2: ptr(l+n1*sizeof(a)), n1: size_t n1, n2: size_t n2
@@ -133,12 +135,13 @@ merge{l}{xs1,xs2}{n1,n2}
       val [n11:int] n11 = halfsize (n1)
       val nth12 = lemma_length_nth {xs1}{..}{n11} (pflen_xs1)
       val v12 = gfarray_get_at (nth12, pfarr1 | p1, n11)
-      val [n21:int] n21 = findindex (pfarr2 | p2, v12)
+      val [n21:int] n21 = findindex (pflen_xs2, pford_xs2, pfarr2 | p2, v12)
       prval (pflen_xs11, pflen_xs12, pford_xs11, pford_xs12, pfapp_xs11_xs12, pfarr_xs11, pfarr_xs12) =
         gfarray_v_split_ord {a}{..}{..}{..}{n11} (pflen_xs1, pford_xs1, pfarr1)
       prval (pflen_xs21, pflen_xs22, pford_xs21, pford_xs22, pfapp_xs21_xs22, pfarr_xs21, pfarr_xs22) =
         gfarray_v_split_ord {a}{..}{..}{..}{n21} (pflen_xs2, pford_xs2, pfarr2)
       val p12 = ptr_add (p1, n11)
+      val p22 = ptr_add (p2, n21)
       val (pfarr_xs21, pfarr_xs12 | p21, p12) =
         swap (pflen_xs12, pflen_xs21, pfarr_xs12, pfarr_xs21 | p12, p2, n1-n11, n21)
       val (pfuni1, pford1, pflen1, pfarr1 | (*void*)) =
@@ -146,11 +149,11 @@ merge{l}{xs1,xs2}{n1,n2}
                p1, p21, n11, n21)
       val (pfuni2, pford2, pflen2, pfarr2 | (*void*)) =
         merge (pflen_xs12, pflen_xs22, pford_xs12, pford_xs22, pfarr_xs12, pfarr_xs22 |
-               p12, p21, n1-n11, n2-n21)
+               p12, p22, n1-n11, n2-n21)
       prval (pfapp, pfarr) = gfarray_v_unsplit (pflen1, pfarr1, pfarr2)
-      prval pflen = lemma_append_length (pfapp, pflen1, pflen2)
-      prval pford = lemma_append_isord (pfapp, pford1, pford2)
       prval pfuni = lemma_append_union (pfapp)
+      prval pford = lemma_append_isord (pfapp, pford1, pford2)
+      prval pflen = lemma_append_length (pfapp, pflen1, pflen2)
     in
       (pfuni, pford, pflen, pfarr | (*void*))
     end
