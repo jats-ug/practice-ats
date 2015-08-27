@@ -13,6 +13,13 @@ UNION (
   ys1: ilist, ys2: ilist, res: ilist
 ) (* end of [absprop] *)
 
+extern
+prfun
+union_nil1 {ys:ilist} (): UNION (ilist_nil, ys, ys)
+extern
+prfun
+union_nil2 {ys:ilist} (): UNION (ys, ilist_nil, ys)
+
 extern prfun
 lemma_perm
   {xs1,xs2:ilist}{xs:ilist}
@@ -22,7 +29,7 @@ lemma_perm
 , PERMUTE (xs1, ys1), PERMUTE (xs2, ys2), UNION (ys1, ys2, ys)
 ) : PERMUTE (xs, ys)
 
-extern fun{a:vt0p}
+extern fun{a:t0p}
 gfarray_mergesort
   {l:addr}{xs1:ilist}{n:nat}
 (
@@ -31,7 +38,7 @@ gfarray_mergesort
 | p: ptr(l), n: size_t n
 ) : [xs2:ilist] (SORT(xs1, xs2), gfarray_v(a, l, xs2) | (*void*))
 
-extern fun{a:vt0p}
+extern fun{a:t0p}
 gfarray_mergesort$cmp
   {x1,x2:int}
   (x1: &stamped_vt (a, x1), x2: &stamped_vt (a, x2)): int(sgn(x1-x2))
@@ -39,24 +46,114 @@ gfarray_mergesort$cmp
 // xxx Instead of "half"?
 extern
 fun halfsize{n:nat}
-  (n: size_t n):<> [n2:nat | 2*n2 <= n] size_t (n2)
+  (n: size_t n):<> [n2:nat | n2 < n; 2*n2 <= n] size_t (n2)
 
 extern
 prfun sort_nilsing
   {xs:ilist}{n:nat | n <= 1} (pf: LENGTH (xs, n)): SORT (xs, xs)
 
 // xxx Not yet
-extern fun{a:vt0p}
-merge
-  {l:addr}{xs1,xs2:ilist}{n1:nat}
+extern prfun
+gfarray_v_split_ord
+  {a:vt0p}
+  {l:addr}
+  {xs:ilist}
+  {n:int}
+  {i:nat | i <= n}
+(
+  pflen: LENGTH (xs, n)
+, pford: ISORD (xs)
+, pfarr: gfarray_v (a, l, xs)
+) : [xs1,xs2:ilist]
+(
+  LENGTH (xs1, i)
+, LENGTH (xs2, n-i)
+, ISORD (xs1)
+, ISORD (xs2)
+, APPEND (xs1, xs2, xs)
+, gfarray_v (a, l, xs1)
+, gfarray_v (a, l+i*sizeof(a), xs2)
+)
+
+// xxx Not yet
+extern fun{a:t0p}
+findindex
+  {l:addr}{x:int}{xs:ilist}{n:nat}
+(
+  pfarr: !gfarray_v (a, l, xs)
+| p: ptr(l), v: stamped_t (a, x)
+) : [n2:nat | n2 <= n] size_t (n2)
+
+// xxx Not yet
+extern fun{a:t0p}
+swap
+  {l:addr}{xs1,xs2:ilist}{n1,n2:nat}
 (
   pflen_xs1: LENGTH (xs1, n1)
+, pflen_xs2: LENGTH (xs1, n2)
+, pfarr1: gfarray_v (a, l, xs1)
+, pfarr2: gfarray_v (a, l+n1*sizeof(a), xs2)
+| p1: ptr(l), p2: ptr(l+n1*sizeof(a)), n1: size_t n1, n2: size_t n2
+) : (gfarray_v (a, l, xs2), gfarray_v (a, l+n2*sizeof(a), xs1) | ptr(l), ptr(l+n2*sizeof(a)))
+
+extern fun{a:t0p}
+merge
+  {l:addr}{xs1,xs2:ilist}{n1,n2:nat}
+(
+  pflen_xs1: LENGTH (xs1, n1)
+, pflen_xs2: LENGTH (xs2, n2)
 , pford_xs1: ISORD (xs1)
 , pford_xs2: ISORD (xs2)
 , pfarr1: gfarray_v (a, l, xs1)
 , pfarr2: gfarray_v (a, l+n1*sizeof(a), xs2)
-| p1: ptr(l), p2: ptr(l+n1*sizeof(a)), n1: size_t n1
-) : [xs:ilist] (UNION (xs1, xs2, xs), ISORD (xs), gfarray_v (a, l, xs) | (*void*))
+| p1: ptr(l), p2: ptr(l+n1*sizeof(a)), n1: size_t n1, n2: size_t n2
+) : [xs:ilist] (UNION (xs1, xs2, xs), ISORD (xs), LENGTH (xs, n1+n2), gfarray_v (a, l, xs) | (*void*))
+
+implement{a}
+merge{l}{xs1,xs2}{n1,n2}
+(pflen_xs1, pflen_xs2, pford_xs1, pford_xs2, pfarr1, pfarr2 | p1, p2, n1, n2) =
+  case+ 0 of
+  | _ when n1 = 0 => let
+      prval LENGTHnil () = pflen_xs1
+      prval () = $UN.castview0(pfarr1)
+    in
+      (union_nil1 (), pford_xs2, pflen_xs2, pfarr2 | (*void*))
+    end
+  | _ when n2 = 0 => let
+      prval LENGTHnil () = pflen_xs2
+      prval () = $UN.castview0(pfarr2)
+    in
+      (union_nil2 (), pford_xs1, pflen_xs1, pfarr1 | (*void*))
+    end
+  | _ => let
+      extern prfun lemma_append_isord {xs1,xs2,xs:ilist}
+        (APPEND (xs1, xs2, xs), ISORD (xs1), ISORD (xs2)): ISORD (xs) // xxx
+      extern prfun lemma_append_union {xs,xs1,xs2:ilist}
+        (APPEND (xs1, xs2, xs)): UNION (xs1, xs2, xs)
+      val [n11:int] n11 = halfsize (n1)
+      val nth12 = lemma_length_nth {xs1}{..}{n11} (pflen_xs1)
+      val v12 = gfarray_get_at (nth12, pfarr1 | p1, n11)
+      val [n21:int] n21 = findindex (pfarr2 | p2, v12)
+      prval (pflen_xs11, pflen_xs12, pford_xs11, pford_xs12, pfapp_xs11_xs12, pfarr_xs11, pfarr_xs12) =
+        gfarray_v_split_ord {a}{..}{..}{..}{n11} (pflen_xs1, pford_xs1, pfarr1)
+      prval (pflen_xs21, pflen_xs22, pford_xs21, pford_xs22, pfapp_xs21_xs22, pfarr_xs21, pfarr_xs22) =
+        gfarray_v_split_ord {a}{..}{..}{..}{n21} (pflen_xs2, pford_xs2, pfarr2)
+      val p12 = ptr_add (p1, n11)
+      val (pfarr_xs21, pfarr_xs12 | p21, p12) =
+        swap (pflen_xs12, pflen_xs21, pfarr_xs12, pfarr_xs21 | p12, p2, n1-n11, n21)
+      val (pfuni1, pford1, pflen1, pfarr1 | (*void*)) =
+        merge (pflen_xs11, pflen_xs21, pford_xs11, pford_xs21, pfarr_xs11, pfarr_xs21 |
+               p1, p21, n11, n21)
+      val (pfuni2, pford2, pflen2, pfarr2 | (*void*)) =
+        merge (pflen_xs12, pflen_xs22, pford_xs12, pford_xs22, pfarr_xs12, pfarr_xs22 |
+               p12, p21, n1-n11, n2-n21)
+      prval (pfapp, pfarr) = gfarray_v_unsplit (pflen1, pfarr1, pfarr2)
+      prval pflen = lemma_append_length (pfapp, pflen1, pflen2)
+      prval pford = lemma_append_isord (pfapp, pford1, pford2)
+      prval pfuni = lemma_append_union (pfapp)
+    in
+      (pfuni, pford, pflen, pfarr | (*void*))
+    end
 
 implement{a}
 gfarray_mergesort{l}{xs}{n}
@@ -72,8 +169,8 @@ gfarray_mergesort{l}{xs}{n}
     prval (pford_xs2, pfperm_xs2) = sort_elim (pfsort_xs2)
     prval pflen_xs1 = lemma_permute_length(pfperm_xs1, pflen_xs1)
     prval pflen_xs2 = lemma_permute_length(pfperm_xs2, pflen_xs2)
-    val (pfuni, pford, pfarr | (*void*)) =
-      merge (pflen_xs1, pford_xs1, pford_xs2, pfarr_xs1, pfarr_xs2 | p, p2, n2)
+    val (pfuni, pford, pflen, pfarr | (*void*)) =
+      merge (pflen_xs1, pflen_xs2,pford_xs1, pford_xs2, pfarr_xs1, pfarr_xs2 | p, p2, n2, n-n2)
     prval pfperm = lemma_perm (pfapp_xs1_xs2, pfperm_xs1, pfperm_xs2, pfuni)
     prval pfsrt = sort_make (pford, pfperm)
   in
@@ -90,7 +187,7 @@ implement main0 () = {
   #define N 15
   prval nth = lemma_length_nth {xs}{..}{N} (pflen)
   val v = gfarray_get_at (nth, pfarr | arr, i2sz(N))
-  val () = println! ("gfarray[0] = ", unstamp_t{int}(v))
+  val () = println! ("gfarray[15] = ", unstamp_t{int}(v))
   // Finish array
   prval () = $UN.castview0(pfarr)
 }
