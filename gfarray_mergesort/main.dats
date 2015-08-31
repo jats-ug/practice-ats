@@ -129,11 +129,14 @@ merge{l}{xs1,xs2}{n1,n2}
     end
   | _ => let
       extern prfun lemma_append_isord {xs1,xs2,xs:ilist}
-        (APPEND (xs1, xs2, xs), ISORD (xs1), ISORD (xs2)): ISORD (xs) // xxx
+        (APPEND (xs1, xs2, xs), ISORD (xs1), ISORD (xs2)): ISORD (xs) // xxx Weak
       extern prfun lemma_append_union {xs,xs1,xs2:ilist}
         (APPEND (xs1, xs2, xs)): UNION (xs1, xs2, xs)
+      extern prfun lemma_mix_union {xs1,xs2,xs11,xs12,xs21,xs22,xs1',xs2',xs':ilist}
+        (UNION (xs11, xs12, xs1), UNION (xs21, xs22, xs2), UNION (xs11, xs21, xs1'),
+         UNION (xs12, xs22, xs2'), UNION (xs1', xs2', xs')): UNION (xs1, xs2, xs')
       val [n11:int] n11 = halfsize (n1)
-      val nth12 = lemma_length_nth {xs1}{..}{n11} (pflen_xs1)
+      prval nth12 = lemma_length_nth {xs1}{..}{n11} (pflen_xs1)
       val v12 = gfarray_get_at (nth12, pfarr1 | p1, n11)
       val [n21:int] n21 = findindex (pflen_xs2, pford_xs2, pfarr2 | p2, v12)
       prval (pflen_xs11, pflen_xs12, pford_xs11, pford_xs12, pfapp_xs11_xs12, pfarr_xs11, pfarr_xs12) =
@@ -152,10 +155,13 @@ merge{l}{xs1,xs2}{n1,n2}
                p12, p22, n1-n11, n2-n21)
       prval (pfapp, pfarr) = gfarray_v_unsplit (pflen1, pfarr1, pfarr2)
       prval pfuni = lemma_append_union (pfapp)
+      prval pfuni_xs11_xs12 = lemma_append_union (pfapp_xs11_xs12)
+      prval pfuni_xs21_xs22 = lemma_append_union (pfapp_xs21_xs22)
+      prval pfuni' = lemma_mix_union (pfuni_xs11_xs12, pfuni_xs21_xs22, pfuni1, pfuni2, pfuni)
       prval pford = lemma_append_isord (pfapp, pford1, pford2)
       prval pflen = lemma_append_length (pfapp, pflen1, pflen2)
     in
-      (pfuni, pford, pflen, pfarr | (*void*))
+      (pfuni', pford, pflen, pfarr | (*void*))
     end
 
 implement{a}
