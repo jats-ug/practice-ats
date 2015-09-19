@@ -41,7 +41,7 @@ gfarray_mergesort
 extern fun{a:t0p}
 gfarray_mergesort$cmp
   {x1,x2:int}
-  (x1: &stamped_vt (a, x1), x2: &stamped_vt (a, x2)): int(sgn(x1-x2))
+  (x1: stamped_t (a, x1), x2: stamped_t (a, x2)): int(sgn(x1-x2))
 
 // xxx Instead of "half"?
 extern
@@ -83,7 +83,7 @@ findindex
   pflen: LENGTH (xs, n)
 , pford: ISORD (xs)
 , pfarr: !gfarray_v (a, l, xs)
-| p: ptr(l), v: stamped_t (a, x)
+| p: ptr(l), n: size_t n, v: stamped_t (a, x)
 ) : [n2:nat | n2 <= n] size_t (n2)
 
 // xxx Not yet
@@ -112,6 +112,27 @@ merge
 ) : [xs:ilist] (UNION (xs1, xs2, xs), ISORD (xs), LENGTH (xs, n1+n2), gfarray_v (a, l, xs) | (*void*))
 
 implement{a}
+findindex{l}{x}{xs}{n}
+(pflen, pford, pfarr | p, n, v) = let
+  fun loop
+    {l:addr}{x:int}{xs:ilist}{n:nat}{i:nat | i <= n} (
+      pflen: LENGTH (xs, n)
+    , pford: ISORD (xs)
+    , pfarr: !gfarray_v (a, l, xs)
+    | p: ptr(l), n: size_t n, v: stamped_t (a, x), i: size_t i
+    ) : [n2:nat | n2 <= n] size_t (n2) =
+    if i = n then i else let
+      prval nth = lemma_length_nth {xs}{..}{i} (pflen)
+      val v' = gfarray_get_at (nth, pfarr | p, i)
+      val sgn = gfarray_mergesort$cmp (v, v') // xxx Why can't call with reference?
+    in
+      if sgn <= 0 then i else loop (pflen, pford, pfarr | p, n, v, i+1)
+    end
+in
+  loop (pflen, pford, pfarr | p, n, v, i2sz(0))
+end
+
+implement{a}
 merge{l}{xs1,xs2}{n1,n2}
 (pflen_xs1, pflen_xs2, pford_xs1, pford_xs2, pfarr1, pfarr2 | p1, p2, n1, n2) =
   case+ 0 of
@@ -138,7 +159,7 @@ merge{l}{xs1,xs2}{n1,n2}
       val [n11:int] n11 = halfsize (n1)
       prval nth12 = lemma_length_nth {xs1}{..}{n11} (pflen_xs1)
       val v12 = gfarray_get_at (nth12, pfarr1 | p1, n11)
-      val [n21:int] n21 = findindex (pflen_xs2, pford_xs2, pfarr2 | p2, v12)
+      val [n21:int] n21 = findindex (pflen_xs2, pford_xs2, pfarr2 | p2, n2, v12)
       prval (pflen_xs11, pflen_xs12, pford_xs11, pford_xs12, pfapp_xs11_xs12, pfarr_xs11, pfarr_xs12) =
         gfarray_v_split_ord {a}{..}{..}{..}{n11} (pflen_xs1, pford_xs1, pfarr1)
       prval (pflen_xs21, pflen_xs22, pford_xs21, pford_xs22, pfapp_xs21_xs22, pfarr_xs21, pfarr_xs22) =
