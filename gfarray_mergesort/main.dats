@@ -115,7 +115,7 @@ implement{a}
 findindex{l}{x}{xs}{n}
 (pflen, pford, pfarr | p, n, v) = let
   fun loop
-    {l:addr}{x:int}{xs:ilist}{n:nat}{i:nat | i <= n} (
+    {l:addr}{x:int}{xs:ilist}{n:nat}{i:nat | i <= n} .<n-i>. (
       pflen: LENGTH (xs, n)
     , pford: ISORD (xs)
     , pfarr: !gfarray_v (a, l, xs)
