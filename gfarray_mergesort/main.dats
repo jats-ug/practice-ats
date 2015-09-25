@@ -75,7 +75,6 @@ gfarray_v_split_ord
 , gfarray_v (a, l+i*sizeof(a), xs2)
 )
 
-// xxx Not yet
 extern fun{a:t0p}
 findindex
   {l:addr}{x:int}{xs:ilist}{n:nat}
@@ -86,7 +85,6 @@ findindex
 | p: ptr(l), n: size_t n, v: stamped_t (a, x)
 ) : [n2:nat | n2 <= n] size_t (n2)
 
-// xxx Not yet
 extern fun{a:t0p}
 swap
   {l:addr}{xs1,xs2:ilist}{n1,n2:nat}
@@ -133,6 +131,40 @@ in
 end
 
 implement{a}
+swap{l}{xs1,xs2}{n1,n2}
+(pflen_xs1, pflen_xs2, pfarr1, pfarr2 | p1, p2, n1, n2) = let
+  fun rshift
+    {l:addr}{xs:ilist}{n,i:nat} .<i>. (
+      pflen: LENGTH (xs, n), pfarr: !gfarray_v (a, l, xs)
+    | p: ptr(l), n: size_t n, i: size_t i): void = let
+    fun loop
+      {l:addr}{xs:ilist}{n:nat}{i:nat | i < n} (
+        pflen: LENGTH (xs, n), pfarr: !gfarray_v (a, l, xs)
+      | p: ptr(l), n: size_t n, i: size_t i): [x0:int] stamped_t (a, x0) = let
+        prval nth = NTHbas ()
+      in
+        gfarray_get_at (nth, pfarr | p, i2sz 0) // xxx
+      end
+  in
+    if i = i2sz(0) then () else let
+      val x0 = loop (pflen, pfarr | p, n, i2sz 0)
+      // xxx val () = gfarray_set_at ()
+    in
+      rshift (pflen, pfarr | p, n, i-1)
+    end
+  end
+  extern prfun lemma_swap {a:vt0p}{l:addr}{xs1,xs2,xs:ilist}
+    (LENGTH (xs1, n1), LENGTH (xs2, n2), APPEND (xs1, xs2, xs), gfarray_v (a, l, xs)):
+    (gfarray_v (a, l, xs2), gfarray_v (a, l+n2*sizeof(a), xs1))
+  prval (pfapp, pfarr) = gfarray_v_unsplit (pflen_xs1, pfarr1, pfarr2)
+  // xxx do shift
+  prval (pfarr2', pfarr1') = lemma_swap (pflen_xs1, pflen_xs2, pfapp, pfarr)
+  val p1' = ptr_add<a> (p1, n2)
+in
+  (pfarr2', pfarr1' | p1, p1')
+end
+
+implement{a}
 merge{l}{xs1,xs2}{n1,n2}
 (pflen_xs1, pflen_xs2, pford_xs1, pford_xs2, pfarr1, pfarr2 | p1, p2, n1, n2) =
   case+ 0 of
@@ -164,8 +196,8 @@ merge{l}{xs1,xs2}{n1,n2}
         gfarray_v_split_ord {a}{..}{..}{..}{n11} (pflen_xs1, pford_xs1, pfarr1)
       prval (pflen_xs21, pflen_xs22, pford_xs21, pford_xs22, pfapp_xs21_xs22, pfarr_xs21, pfarr_xs22) =
         gfarray_v_split_ord {a}{..}{..}{..}{n21} (pflen_xs2, pford_xs2, pfarr2)
-      val p12 = ptr_add (p1, n11)
-      val p22 = ptr_add (p2, n21)
+      val p12 = ptr_add<a> (p1, n11)
+      val p22 = ptr_add<a> (p2, n21)
       val (pfarr_xs21, pfarr_xs12 | p21, p12) =
         swap (pflen_xs12, pflen_xs21, pfarr_xs12, pfarr_xs21 | p12, p2, n1-n11, n21)
       val (pfuni1, pford1, pflen1, pfarr1 | (*void*)) =
@@ -192,7 +224,7 @@ gfarray_mergesort{l}{xs}{n}
     val [n2:int] n2 = halfsize (n)
     prval (pflen_xs1, pflen_xs2, pfapp_xs1_xs2, pfarr_xs1, pfarr_xs2) =
       gfarray_v_split {a}{..}{..}{..}{n2} (pflen, pfarr)
-    val p2 = ptr_add (p, n2)
+    val p2 = ptr_add<a> (p, n2)
     val (pfsort_xs1, pfarr_xs1 | (*void*)) = gfarray_mergesort (pflen_xs1, pfarr_xs1 | p, n2)
     val (pfsort_xs2, pfarr_xs2 | (*void*)) = gfarray_mergesort (pflen_xs2, pfarr_xs2 | p2, n-n2)
     prval (pford_xs1, pfperm_xs1) = sort_elim (pfsort_xs1)
