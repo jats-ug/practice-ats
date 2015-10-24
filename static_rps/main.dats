@@ -2,9 +2,11 @@
 #include "share/atspre_staload.hats"
 
 staload "rps.sats"
+staload _ = "rps.dats"
 
-fun win (a: rps): rps = r_rps
+fun win (x: rps): rps = r_rps // xxx
 
 implement main0 () = {
-  val _ = win r_rps
+  val w = win r_rps
+  val () = println! w
 }
