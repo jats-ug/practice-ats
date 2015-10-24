@@ -4,9 +4,9 @@
 staload "rps.sats"
 staload _ = "rps.dats"
 
-fun win (x: rps): rps = r_rps // xxx
+fun win (x: rps_t): rps_t = p_rps_t() // xxx
 
 implement main0 () = {
-  val w = win r_rps
+  val w = win (r_rps_t())
   val () = println! w
 }

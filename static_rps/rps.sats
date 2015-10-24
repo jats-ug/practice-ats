@@ -1,21 +1,6 @@
-datasort rps = (* abstract *)
+datasort rps_s = r_rps_s | p_rps_s | s_rps_s
+datatype rps_t(rps_s) = r_rps_t(r_rps_s) | p_rps_t(p_rps_s) | s_rps_t(s_rps_s)
+typedef rps_t = [x: rps_s] rps_t (x)
 
-stacst r_rps: rps (* Rock *)
-and    p_rps: rps (* Paper *)
-and    s_rps: rps (* Scissors *)
-
-abst@ype rps (rps) = int
-typedef rps = [x:rps] rps (x)
-
-val r_rps: rps (r_rps) = "mac#"
-val p_rps: rps (p_rps) = "mac#"
-val s_rps: rps (s_rps) = "mac#"
-
-%{
-#define r_rps 0
-#define p_rps 1
-#define s_rps 2
-%}
-
-fun{} print_rps (x: rps): void
+fun{} print_rps (x: rps_t): void
 overload print with print_rps
