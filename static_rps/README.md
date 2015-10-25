@@ -1,4 +1,4 @@
-# Rock-paper-scissors libary
+# Rock-paper-scissors library
 
 ## Purpose
 
