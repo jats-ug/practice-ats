@@ -24,6 +24,7 @@ ATS language prove these functions.
 
 * Can't use static function instead of proofs?
 
-## Discussion
+## Discussions
 
 * How to identify dynamic value such like bool? https://groups.google.com/forum/#!topic/ats-lang-users/iM6S1KBlQF0
+* Rock-paper-scissors library to learn statics and proofs on ATS language https://groups.google.com/forum/#!topic/ats-lang-users/YcdEzhJdJzs
