@@ -7,7 +7,12 @@ rps_win (x) = case+ x of
   | s_rps_t() => (RPS_R_WIN_S() | r_rps_t())
 
 implement{}
-rps_even (pf | x, y) = rps_win x
+rps_even (pf_xy | x, y) = let
+  val (pf_zx | z) = rps_win x
+  prval pf_yz = rps_even_pf (pf_zx, pf_xy)
+in
+  (pf_yz, pf_zx | z)
+end
 
 implement{}
 print_rps (x) = let val s = case+ x of
