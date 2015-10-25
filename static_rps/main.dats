@@ -5,6 +5,9 @@ staload "rps.sats"
 staload _ = "rps.dats"
 
 implement main0 () = {
-  val (_ | w) = rps_win (r_rps_t())
-  val () = println! w
+  val paper = p_rps_t()
+  val (pf_win | win) = rps_win (paper)
+  val () = println! (win, " win ", paper, ".")
+  val (_ | even) = rps_even (pf_win | win, paper)
+  val () = println! (even, " even between ", win, " and ", paper, ".")
 }
