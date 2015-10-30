@@ -6,8 +6,8 @@ staload _ = "rps.dats"
 
 implement main0 () = {
   val paper = p_rps_t()
-  val (pf_win | win) = rps_win (paper)
+  val (pf_win | win) = rps_win_p (paper)
   val () = println! (win, " win ", paper, ".") // => Scissors win Paper.
-  val (_, _ | even) = rps_even (pf_win | win, paper)
+  val (_, _ | even) = rps_even_p (pf_win | win, paper)
   val () = println! (even, " even between ", win, " and ", paper, ".") // => Rock even between Scissors and Paper.
 }
