@@ -1,5 +1,4 @@
 practice-ats
 ============
 
-ATS言語でいろいろ試すところです。
-ディレクトリ掘ればどんなATSコードも置いて良しですー。
+Feel free to write any ATS code!
