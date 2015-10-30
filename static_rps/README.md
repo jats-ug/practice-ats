@@ -22,7 +22,7 @@ ATS language prove these functions.
 
 ## Question
 
-* Can't use static function instead of proofs?
+* Can't use static function instead of proofs? => Yes, can use it as statics function.
 
 ## Discussions
 
