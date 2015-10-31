@@ -48,6 +48,8 @@ int main() {
 	rps_t paper_d = P_RPS_T;
 	rps_t win_d = rps_win_d (paper_d);
 	print_rps(win_d); printf(" win "); print_rps(paper_d); printf(".\n");
+	/* => Scissors win Paper. */
 	rps_t even_d = rps_even_d(win_d, paper_d);
 	print_rps(even_d); printf(" is even between "); print_rps(win_d); printf(" and "); print_rps(paper_d); printf(".\n");
+	/* => Rock is even between Scissors and Paper. */
 }
