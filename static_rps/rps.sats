@@ -17,7 +17,7 @@ fun{} rps_win_d (x: rps_t_any): rps_t_any
 fun{} rps_even_d (x: rps_t_any, y: rps_t_any): rps_t_any // The x should win the y.
 
 (* Statics *)
-stacst rps_win_sta : (rps_s, rps_s) -> bool
+stacst rps_win_sta: (rps_s, rps_s) -> bool
 
 fun{} rps_win_s
   {r1:rps_s} (x: rps_t (r1)):
