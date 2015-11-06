@@ -29,9 +29,9 @@ fun{} rps_even_s
 
 (* Proofs *)
 dataprop RPS_WIN (rps_s, rps_s) =
-  | RPS_P_WIN_R (p_rps_s, r_rps_s) // Paper wins Rock
-  | RPS_S_WIN_P (s_rps_s, p_rps_s) // Scissors win Paper
-  | RPS_R_WIN_S (r_rps_s, s_rps_s) // Rock wins Scissors
+  | RPS_P_WIN_R (p_rps_s, r_rps_s) // Spec: Paper wins Rock
+  | RPS_S_WIN_P (s_rps_s, p_rps_s) // Spec: Scissors win Paper
+  | RPS_R_WIN_S (r_rps_s, s_rps_s) // Spec: Rock wins Scissors
 
 praxi rps_even_pf
   {r1,r2,r3:rps_s} (pf1: RPS_WIN (r1,r2), pf2: RPS_WIN (r2,r3)):

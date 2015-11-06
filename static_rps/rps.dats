@@ -23,9 +23,9 @@ implement{} rps_even_d (x, y) =
   | (_, _) => $raise GenerallyExn("The x should win the y.")
 
 (* Statics *)
-extern praxi rps_win_r_s_pf (): [rps_win_sta(r_rps_s, s_rps_s)] void
-extern praxi rps_win_p_r_pf (): [rps_win_sta(p_rps_s, r_rps_s)] void
-extern praxi rps_win_s_p_pf (): [rps_win_sta(s_rps_s, p_rps_s)] void
+extern praxi rps_win_p_r_pf (): [rps_win_sta(p_rps_s, r_rps_s)] void // Spec: Paper wins Rock
+extern praxi rps_win_s_p_pf (): [rps_win_sta(s_rps_s, p_rps_s)] void // Spec: Scissors win Paper
+extern praxi rps_win_r_s_pf (): [rps_win_sta(r_rps_s, s_rps_s)] void // Spec: Rock wins Scissors
 
 implement{} rps_win_s (x) = let
   prval () = rps_win_r_s_pf()
