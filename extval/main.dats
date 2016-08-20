@@ -18,6 +18,7 @@ struct foo {
   int *p;
 };
 struct foo foo_var;
+int int_var;
 %}
 
 absvt@ype struct_foo
@@ -25,12 +26,14 @@ vtypedef struct_foo_impl = $extype_struct"struct foo" of {
   a = int,
   p = ptr
 }
-
 vtypedef pstruct_foo = [l:addr] (struct_foo@l | ptr(l))
-
 assume struct_foo = struct_foo_impl
 macdef takeout_pstruct_foo = $extval(pstruct_foo, "&foo_var")
 extern praxi addback_pstruct_foo (pstruct_foo): void
+
+vtypedef pint = [l:addr] (int@l | ptr(l))
+macdef takeout_int_var = $extval(pint, "&int_var")
+extern praxi addback_int_var (pint): void
 
 implement main0 () = {
   val (pf | pfoo) = takeout_pstruct_foo
@@ -47,6 +50,13 @@ implement main0 () = {
   val () = println! !(pfoo->p) // print 10
 //
   prval () = addback_pstruct_foo @(pf | pfoo)
+//
+//
+  val (pfint | pint_var) = takeout_int_var
+  val () = println! !pint_var
+  val () = !pint_var := 9
+  val () = println! !pint_var
+  prval () = addback_int_var @(pfint | pint_var)
 }
 
 (* ****** ****** *)
