@@ -40,4 +40,6 @@ implement main0 () = {
   val () = println! (bar.p)
 //  val () = println! (foo.a)
 //  val () = println! (bar.a)
+  var buz: @{ a = int, b = ptr }
+  val () = buz.a := 1
 }
