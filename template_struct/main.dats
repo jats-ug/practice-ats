@@ -22,11 +22,11 @@ abst@ype struct_foo
 abst@ype struct_bar
 typedef struct_foo_impl = $extype_struct"struct foo" of {
   b = int,
-  p = ptr
+  p = [l:addr] ptr(l)
 }
 typedef struct_bar_impl = $extype_struct"struct bar" of {
   a = int,
-  p = ptr
+  p = [l:addr] ptr(l)
 }
 assume struct_foo = struct_foo_impl
 assume struct_bar = struct_bar_impl
@@ -54,7 +54,7 @@ overload .b with struct_foo_get_b
 overload .b with struct_foo_set_b
 
 // struct foo#p
-fun{} struct_foo_get_p {l:agz} (x: !struct_foo_ptr(l)): ptr = ret where {
+fun{} struct_foo_get_p {l1:agz} (x: !struct_foo_ptr(l1)): [l2:addr] ptr(l2) = ret where {
   val (pf | p) = takeout_struct_foo (x)
   val ret = p->p
   val () = addback_struct_foo (pf | p)
@@ -82,7 +82,7 @@ overload .a with struct_bar_get_a
 overload .a with struct_bar_set_a
 
 // struct bar#p
-fun{} struct_bar_get_p {l:agz} (x: !struct_bar_ptr(l)): ptr = ret where {
+fun{} struct_bar_get_p {l1:agz} (x: !struct_bar_ptr(l1)): [l2:addr] ptr(l2) = ret where {
   val (pf | p) = takeout_struct_bar (x)
   val ret = p->p
   val () = addback_struct_bar (pf | p)
@@ -96,18 +96,32 @@ overload .p with struct_bar_get_p
 overload .p with struct_bar_set_p
 
 // Should be user code
-fun print_foobar {l:agz} (x: !struct_foo_ptr(l)): void = {
-  val b = x.b()
-  val p = x.p()
+fun print_foobar {l:agz} (foo: !struct_foo_ptr(l)): void = {
+  val b = foo.b()
+  val p = foo.p()
   val () = println! ("foo: b=", b, " p=", p)
-//  val bar_ptr = takeout_struct_bar_ptr p
-//  val () = addback_struct_bar_ptr bar_ptr
+  val () = if (p != the_null_ptr) then {
+    extern castfn __why {l1:addr} (p: ptr(l1)): [l2:agz] ptr(l2)
+    val bar_ptr = takeout_struct_bar_ptr (__why(p))
+    val () = print_bar bar_ptr
+    val () = addback_struct_bar_ptr bar_ptr
+  }
 }
-
-fun print_bar {l:agz} (x: !struct_bar_ptr(l)): void = {
-  val a = x.a()
-  val p = x.p()
+and print_bar {l:agz} (bar: !struct_bar_ptr(l)): void = {
+  val a = bar.a()
+  val p = bar.p()
   val () = println! ("bar: a=", a, " p=", p)
+  val () = if (p != the_null_ptr) then {
+    extern castfn __why {l1:addr} (p: ptr(l1)): [l2:agz] ptr(l2)
+    val foo_ptr = takeout_struct_foo_ptr (__why(p))
+    val () = print_foo foo_ptr
+    val () = addback_struct_foo_ptr foo_ptr
+  }
+}
+and print_foo {l:agz} (foo: !struct_foo_ptr(l)): void = {
+  val b = foo.b()
+  val p = foo.p()
+  val () = println! ("foo: b=", b, " p=", p)
 }
 
 implement main0 () = {
@@ -119,9 +133,9 @@ implement main0 () = {
   val foo_ptr = takeout_struct_foo_ptr (addr@foo)
   val bar_ptr = takeout_struct_bar_ptr (addr@bar)
 //  val () = foo_ptr.b := 9 // error(3): the dynamic expression cannot be assigned the type [S2Eapp(S2Ecst(struct_bar_ptr); S2EVar(4717))].
-  val () = struct_foo_set_b (foo_ptr, 9)
+  val () = struct_foo_set_b (foo_ptr, 10)
   val () = struct_foo_set_p (foo_ptr, addr@bar)
-  val () = struct_bar_set_a (bar_ptr, 9)
+  val () = struct_bar_set_a (bar_ptr, 20)
   val () = struct_bar_set_p (bar_ptr, addr@foo)
   val () = addback_struct_foo_ptr foo_ptr
   val () = addback_struct_bar_ptr bar_ptr
