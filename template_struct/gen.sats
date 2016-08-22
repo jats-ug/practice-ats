@@ -16,26 +16,22 @@ struct bar {
 // Should be semi-automatically generated code
 absvtype struct_foo_ptr(l:addr) = ptr(l)
 absvtype struct_bar_ptr(l:addr) = ptr(l)
-abst@ype struct_foo
-abst@ype struct_bar
-typedef struct_foo_impl = $extype_struct"struct foo" of {
+typedef struct_foo = $extype_struct"struct foo" of {
   b = int,
   p = [l:addr] ptr(l)
 }
-typedef struct_bar_impl = $extype_struct"struct bar" of {
+typedef struct_bar = $extype_struct"struct bar" of {
   a = int,
   p = [l:addr] ptr(l)
 }
-assume struct_foo = struct_foo_impl
-assume struct_bar = struct_bar_impl
 castfn takeout_struct_foo_ptr {l:agz} (p: ptr(l)): struct_foo_ptr(l)
 castfn addback_struct_foo_ptr {l:agz} (x: struct_foo_ptr(l)): void
-castfn takeout_struct_foo {l:agz} (p: !struct_foo_ptr(l)): (struct_foo_impl@l | ptr(l))
-castfn addback_struct_foo {l:agz} (pf: struct_foo_impl@l | addr: ptr(l)): void
+castfn takeout_struct_foo {l:agz} (p: !struct_foo_ptr(l)): (struct_foo@l | ptr(l))
+castfn addback_struct_foo {l:agz} (pf: struct_foo@l | addr: ptr(l)): void
 castfn takeout_struct_bar_ptr {l:agz} (p: ptr(l)): struct_bar_ptr(l)
 castfn addback_struct_bar_ptr {l:agz} (x: struct_bar_ptr(l)): void
-castfn takeout_struct_bar {l:agz} (p: !struct_bar_ptr(l)): (struct_bar_impl@l | ptr(l))
-castfn addback_struct_bar {l:agz} (pf: struct_bar_impl@l | addr: ptr(l)): void
+castfn takeout_struct_bar {l:agz} (p: !struct_bar_ptr(l)): (struct_bar@l | ptr(l))
+castfn addback_struct_bar {l:agz} (pf: struct_bar@l | addr: ptr(l)): void
 
 // struct foo#b
 fun{} struct_foo_get_b {l:agz} (x: !struct_foo_ptr(l)): int

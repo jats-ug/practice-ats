@@ -1,3 +1,4 @@
+// Should be semi-automatically generated code
 staload "gen.sats"
 
 // struct foo#b

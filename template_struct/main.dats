@@ -40,7 +40,7 @@ implement main0 () = {
   // Setup
   val foo_ptr = takeout_struct_foo_ptr (addr@foo)
   val bar_ptr = takeout_struct_bar_ptr (addr@bar)
-//  val () = foo_ptr.b := 9 // error(3): the type [S2Eapp(S2Ecst(struct_foo_ptr); S2Evar(foo(8452)))] is expected to be a tyrec(record).
+  val () = foo_ptr.b 9
   val () = struct_foo_set_b (foo_ptr, 10)
   val () = struct_foo_set_p (foo_ptr, addr@bar)
   val () = struct_bar_set_a (bar_ptr, 20)
