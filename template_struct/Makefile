@@ -3,7 +3,7 @@ PATSOPT=$(PATSHOME)/bin/patsopt
 
 all: a.out
 
-a.out: main.dats
+a.out: main.dats gen.sats gen_tmpl.dats
 	$(PATSCC) -o $@ $< -DATS_MEMALLOC_LIBC
 
 clean:
