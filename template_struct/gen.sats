@@ -5,6 +5,7 @@ struct bar;
 struct foo {
   int b;
   struct bar *p;
+  int **pi;
 };
 struct bar {
   int a;
@@ -17,8 +18,9 @@ struct bar {
 absvtype struct_foo_ptr(l:addr) = ptr(l)
 absvtype struct_bar_ptr(l:addr) = ptr(l)
 typedef struct_foo = $extype_struct"struct foo" of {
-  b = int,
-  p = [l:addr] ptr(l)
+  b  = int,
+  p  = [l:addr] ptr(l),
+  pi = [l:addr] ptr(l)
 }
 typedef struct_bar = $extype_struct"struct bar" of {
   a = int,
@@ -44,6 +46,12 @@ fun{} struct_foo_get_p {l1:agz} (x: !struct_foo_ptr(l1)): [l2:addr] ptr(l2)
 fun{} struct_foo_set_p {l1,l2:agz} (x: !struct_foo_ptr(l1), v: ptr(l2)): void
 overload .p with struct_foo_get_p
 overload .p with struct_foo_set_p
+
+// struct foo#p
+fun{} struct_foo_get_pi {l1:agz} (x: !struct_foo_ptr(l1)): [l2:addr] ptr(l2)
+fun{} struct_foo_set_pi {l1,l2:agz} (x: !struct_foo_ptr(l1), v: ptr(l2)): void
+overload .pi with struct_foo_get_pi
+overload .pi with struct_foo_set_pi
 
 // struct bar#a
 fun{} struct_bar_get_a {l:agz} (x: !struct_bar_ptr(l)): int
