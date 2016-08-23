@@ -9,7 +9,18 @@ fun print_foobar {l:agz} (foo: !struct_foo_ptr(l)): void = {
   val b  = foo.b()
   val p  = foo.p()
   val pi = foo.pi()
-  val () = println! ("foo: b=", b, " p=", p, " pi=", pi)
+  val () = println! ("foo: b=", b)
+  val () = println! ("     p=", p)
+  val () = if pi > the_null_ptr then {
+    val (pf_pi_ptr | pi_ptr) = takeout_ptrptr pi
+    val ppi = !pi_ptr
+    val () = if ppi > the_null_ptr then {
+      val (pf_pppi | pppi) = takeout_ptrint ppi
+      val () = println! ("     !!pi=", !pppi)
+      val () = addback_ptrint (pf_pppi | pppi)
+    } else println! ("     p=(null)", p)
+    val () = addback_ptrptr (pf_pi_ptr | pi_ptr)
+  } else println! ("     p=(null)", p)
   val () = if p > the_null_ptr then {
     val bar_ptr = takeout_struct_bar_ptr p
     val () = print_bar bar_ptr
@@ -19,7 +30,8 @@ fun print_foobar {l:agz} (foo: !struct_foo_ptr(l)): void = {
 and print_bar {l:agz} (bar: !struct_bar_ptr(l)): void = {
   val a = bar.a()
   val p = bar.p()
-  val () = println! ("bar: a=", a, " p=", p)
+  val () = println! ("bar: a=", a)
+  val () = println! ("     p=", p)
   val () = if p > the_null_ptr then {
     val foo_ptr = takeout_struct_foo_ptr p
     val () = print_foo foo_ptr
@@ -27,9 +39,12 @@ and print_bar {l:agz} (bar: !struct_bar_ptr(l)): void = {
   }
 }
 and print_foo {l:agz} (foo: !struct_foo_ptr(l)): void = {
-  val b = foo.b()
-  val p = foo.p()
-  val () = println! ("foo: b=", b, " p=", p)
+  val b  = foo.b()
+  val p  = foo.p()
+  val pi = foo.pi()
+  val () = println! ("foo: b=", b)
+  val () = println! ("     p=", p)
+  val () = println! ("     pi=", pi)
 }
 
 implement main0 () = {

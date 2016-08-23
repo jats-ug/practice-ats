@@ -26,6 +26,10 @@ typedef struct_bar = $extype_struct"struct bar" of {
   a = int,
   p = [l:addr] ptr(l)
 }
+castfn takeout_ptrptr {l1:agz} (p: ptr(l1)): [l2:addr] (ptr(l2)@l1 | ptr(l1))
+castfn addback_ptrptr {l1:agz}{l2:addr} (pf: ptr(l2)@l1 | addr: ptr(l1)): void
+castfn takeout_ptrint {l1:agz} (p: ptr(l1)): (int@l1 | ptr(l1))
+castfn addback_ptrint {l1:agz} (pf: int@l1 | addr: ptr(l1)): void
 castfn takeout_struct_foo_ptr {l:agz} (p: ptr(l)): struct_foo_ptr(l)
 castfn addback_struct_foo_ptr {l:agz} (x: struct_foo_ptr(l)): void
 castfn takeout_struct_foo {l:agz} (p: !struct_foo_ptr(l)): (struct_foo@l | ptr(l))
