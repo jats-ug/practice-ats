@@ -42,6 +42,8 @@ implement main0 () = {
   val () = vbar.x := 1
   val () = vbar.p := addr@vfoo
 //  val () = println! vfoo.p->x // I would like to write like this!
-  val () = println! vfoo.p
+  val (pfat, pfaddback | p) = $UN.ptr1_vtake{bar}(vfoo.p)
+  val () = println! p->x
+  prval () = pfaddback pfat
   val () = println! vbar.p->x
 }
