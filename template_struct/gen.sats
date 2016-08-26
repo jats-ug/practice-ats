@@ -31,7 +31,7 @@ typedef struct_foo = $extype_struct"struct foo" of {
 castfn takeout_struct_foo_ptr: {l:agz} (ptr(l)) -> struct_foo_ptr(l)
 castfn addback_struct_foo_ptr: {l:agz} (struct_foo_ptr(l)) -> void
 castfn takeout_struct_foo: {l:agz} (struct_foo_ptr(l)) -> (struct_foo@l | ptr(l))
-castfn addback_struct_foo: {l:agz} (struct_foo@l | ptr(l)) -> struct_foo_ptr(l)
+prfun  addback_struct_foo: {l:agz} (struct_foo@l | ptr(l)) -> struct_foo_ptr(l)
 
 // struct foo#b
 fun{} struct_foo_get_b: {l:agz} (!struct_foo_ptr(l)) -> int
