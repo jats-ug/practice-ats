@@ -15,6 +15,16 @@ struct foo {
 };
 %}
 
+(* Error: the static identifier [foo] is unrecognized.
+vtypedef bar = $extype_struct"struct bar" of {
+  x = int,
+  p = [l:addr] (foo@l | ptr(l))
+}
+and foo = $extype_struct"struct foo" of {
+  x = int,
+  p = [l:addr] (bar@l | ptr(l))
+}
+*)
 vtypedef bar = $extype_struct"struct bar" of {
   x = int,
   p = [l:addr] ptr(l)
