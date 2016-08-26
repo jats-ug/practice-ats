@@ -3,38 +3,38 @@ staload "gen.sats"
 
 // struct foo#b
 implement{} struct_foo_get_b (x) = ret where {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val ret = p->b
-  val () = x := addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 implement{} struct_foo_set_b (x, v) = {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val () = p->b := v
-  val () = x := addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 
 // struct foo#p
 implement{} struct_foo_get_p (x) = ret where {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val ret = p->p
-  val () = x := addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 implement{} struct_foo_set_p (x, v) = {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val () = p->p := v
-  val () = x := addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 
 // struct foo#p
 implement{} struct_foo_get_pi (x) = ret where {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val ret = p->pi
-  val () = x:= addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 implement{} struct_foo_set_pi (x, v) = {
-  val (pf | p) = takeout_struct_foo (x)
+  val (pf, fpf | p) = takeout_struct_foo (x)
   val () = p->pi := v
-  val () = x := addback_struct_foo (pf | p)
+  prval () = fpf pf
 }
 
 // struct bar#a
