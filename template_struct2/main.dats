@@ -14,9 +14,9 @@ fun init_foobar {l1,l2:agz} (pffoo: !struct_foo? @ l1 >> struct_foo @ l1,
   val () = pbar->p := pfoo // danger!
 }
 
-fun print_foo {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
-  val (fpf_foo | foo_ptr) = take_struct_foo_ptr (pffoo | pfoo)
-  prval () = fpf_foo foo_ptr
+fun print_foobar {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
+  val (pfbar, fpfbar | pbar) = take_struct_foo_p (pffoo | pfoo)
+  prval () = fpfbar pfbar
 }
 and print_bar {l:agz} (pfbar: !struct_bar @ l | pbar: ptr l): void = {
 }
@@ -25,4 +25,5 @@ implement main0 () = {
   var foo: struct_foo
   var bar: struct_bar
   val () = init_foobar (view@foo, view@bar | addr@foo, addr@bar)
+  val () = print_foobar (view@foo | addr@foo)
 }
