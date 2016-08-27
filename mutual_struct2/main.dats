@@ -20,7 +20,7 @@ fun print_foobar {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
   val () = if pbar > 0 then print_bar (pfbar | pbar)
   prval () = fpfbar pfbar
   val (pfbar, pfbarptr, fpfbarptr | pbarptr) = take_struct_foo_pp (pffoo | pfoo)
-//  val () = if pbarptr > 0 && !pbarptr > 0 then print_bar (pfbar | !pbarptr)
+  val () = if !pbarptr > 0 then print_bar (pfbar | !pbarptr) // Why need no checking `pbarptr > 0`?
   prval () = fpfbarptr (pfbar, pfbarptr)
 }
 and print_bar {l:agz} (pfbar: !struct_bar @ l | pbar: ptr l): void = {
