@@ -16,9 +16,19 @@ fun init_foobar {l1,l2:agz} (pffoo: !struct_foo? @ l1 >> struct_foo @ l1,
 
 fun print_foobar {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
   val (pfbar, fpfbar | pbar) = take_struct_foo_p (pffoo | pfoo)
+  val () = if pbar > 0 then print_bar (pfbar | pbar)
   prval () = fpfbar pfbar
 }
 and print_bar {l:agz} (pfbar: !struct_bar @ l | pbar: ptr l): void = {
+  val (pffoo, fpffoo | pfoo) = take_struct_bar_p (pfbar | pbar)
+  val () = println! ("bar a=", pbar->a, " p=", pbar->p)
+  val () = if pfoo > 0 then print_foo (pffoo | pfoo)
+  prval () = fpffoo pffoo
+}
+and print_foo {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
+  val (pfbar, fpfbar | pbar) = take_struct_foo_p (pffoo | pfoo)
+  val () = println! ("foo b=", pfoo->b, " p=", pfoo->p)
+  prval () = fpfbar pfbar
 }
 
 implement main0 () = {
