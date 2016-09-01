@@ -7,18 +7,17 @@ staload UN = "prelude/SATS/unsafe.sats"
 staload "gen.sats"
 
 // Should be user code
-fun init_foobar {l1,l2:agz} (pffoo: !struct_foo? @ l1,
-                             pfbar: !struct_bar? @ l2 |
-                             pfoo: ptr l1, pbar: ptr l2):
-                             (aPtr1(struct_foo), aPtr1(struct_bar)) = ret where {
-  val () = pfoo->pp := addr@(pfoo->p) // Danger! It's raw pointer.
+fun init_foobar (pfoo: ptr, pbar: ptr, ppbar: ptr): (aPtr1(struct_foo), aPtr1(struct_bar)) = ret where {
   val pfoo = $UN.castvwtp0{aPtr1(struct_foo)}(pfoo) // Danger! It's unsafe cast.
   val pbar = $UN.castvwtp0{aPtr1(struct_bar)}(pbar) // Danger! It's unsafe cast.
+  val ppbar = $UN.castvwtp0{aPtr1(aPtr1(struct_bar))}(ppbar) // Danger! It's unsafe cast.
   val () = pfoo.x(10)
   val () = pfoo.p(pbar)
+  val () = pfoo.pp(ppbar)
   val () = pbar.x(20)
   val () = pbar.p(pfoo)
   val ret = (pfoo, pbar)
+  prval () = $UN.cast2void(ppbar)
 }
 
 fun print_foobar (pfoo: !aPtr1(struct_foo)): void = {
@@ -48,7 +47,8 @@ and print_foo (pfoo: !aPtr1(struct_foo)): void = {
 implement main0 () = {
   var foo: struct_foo
   var bar: struct_bar
-  val (pfoo, pbar) = init_foobar (view@foo, view@bar | addr@foo, addr@bar)
+  var pbar = addr@bar
+  val (pfoo, pbar) = init_foobar (addr@foo, addr@bar, addr@pbar)
   prval () = $UN.cast2void(pbar)
   val () = print_foobar pfoo
   prval () = $UN.cast2void(pfoo)

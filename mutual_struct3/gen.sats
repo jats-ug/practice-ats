@@ -35,6 +35,7 @@ static inline void struct_foo_ptr_set_x (struct foo *obj, int x) { obj->x = x; }
 static inline void* struct_foo_ptr_get_p (struct foo *obj) { return obj->p ; }
 static inline void struct_foo_ptr_set_p (struct foo *obj, void *v) { obj->p = v; }
 static inline void* struct_foo_ptr_get_pp (struct foo *obj) { return obj->pp ; }
+static inline void struct_foo_ptr_set_pp (struct foo *obj, void *v) { obj->pp = v; }
 static inline int struct_bar_ptr_get_x (struct bar *obj) { return obj->x ; }
 static inline void struct_bar_ptr_set_x (struct bar *obj, int v) { obj->x = v; }
 static inline void* struct_bar_ptr_get_p (struct bar *obj) { return obj->p ; }
@@ -48,17 +49,18 @@ fun struct_foo_ptr_set_x: (!aPtr1(struct_foo), int) -> void = "mac#"
 fun struct_foo_ptr_get_p: (!aPtr1(struct_foo)) -> aPtr0(struct_bar) = "mac#"
 fun struct_foo_ptr_set_p: (!aPtr1(struct_foo), !aPtr1(struct_bar)) -> void = "mac#"
 fun struct_foo_ptr_get_pp: (!aPtr1(struct_foo)) -> aPtr0(aPtr0(struct_bar)) = "mac#"
+fun struct_foo_ptr_set_pp: (!aPtr1(struct_foo), !aPtr1(aPtr1(struct_bar))) -> void = "mac#"
 overload .x with struct_foo_ptr_get_x
 overload .x with struct_foo_ptr_set_x
 overload .p with struct_foo_ptr_get_p
 overload .p with struct_foo_ptr_set_p
 overload .pp with struct_foo_ptr_get_pp
-//overload .pp with struct_foo_ptr_set_pp
+overload .pp with struct_foo_ptr_set_pp
 
 fun struct_bar_ptr_get_x: (!aPtr1(struct_bar)) -> int = "mac#"
 fun struct_bar_ptr_set_x: (!aPtr1(struct_bar), int) -> void = "mac#"
 fun struct_bar_ptr_get_p: (!aPtr1(struct_bar)) -> aPtr0(struct_foo) = "mac#"
-fun struct_bar_ptr_set_p: (!aPtr1(struct_bar), !aPtr0(struct_foo)) -> void = "mac#"
+fun struct_bar_ptr_set_p: (!aPtr1(struct_bar), !aPtr1(struct_foo)) -> void = "mac#"
 overload .x with struct_bar_ptr_get_x
 overload .x with struct_bar_ptr_set_x
 overload .p with struct_bar_ptr_get_p
