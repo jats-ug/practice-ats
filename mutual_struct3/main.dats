@@ -7,17 +7,17 @@ staload UN = "prelude/SATS/unsafe.sats"
 staload "gen.sats"
 
 // Should be user code
-fun init_foobar {l1,l2:agz} (pffoo: !struct_foo? @ l1 >> struct_foo @ l1,
-                             pfbar: !struct_bar? @ l2 >> struct_bar @ l2 |
+fun init_foobar {l1,l2:agz} (pffoo: !struct_foo? @ l1,
+                             pfbar: !struct_bar? @ l2 |
                              pfoo: ptr l1, pbar: ptr l2):
                              (aPtr1(struct_foo), aPtr1(struct_bar)) = ret where {
-  val () = pfoo->x  := 10
-  val () = pfoo->p  := pbar // Danger! It's raw pointer.
   val () = pfoo->pp := addr@(pfoo->p) // Danger! It's raw pointer.
-  val () = pbar->x  := 20
-  val () = pbar->p  := pfoo // Danger! It's raw pointer.
   val pfoo = $UN.castvwtp0{aPtr1(struct_foo)}(pfoo) // Danger! It's unsafe cast.
   val pbar = $UN.castvwtp0{aPtr1(struct_bar)}(pbar) // Danger! It's unsafe cast.
+  val () = pfoo.x(10)
+  val () = pfoo.p(pbar)
+  val () = pbar.x(20)
+  val () = pbar.p(pfoo)
   val ret = (pfoo, pbar)
 }
 
