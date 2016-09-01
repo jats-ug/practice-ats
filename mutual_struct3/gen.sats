@@ -15,7 +15,6 @@ struct bar {
 %}
 
 // Should be semi-automatically generated code
-// struct foo/bar
 vtypedef struct_foo = $extype_struct "struct foo" of {
   x= int
 , p= ptr
@@ -26,24 +25,25 @@ vtypedef struct_bar = $extype_struct "struct bar" of {
 , p= ptr
 }
 
-// pre define
+// getter/setter in C
 %{#
-#ifndef _STRUCT_GEN_AUTO_H_
-#define _STRUCT_GEN_AUTO_H_
+#ifndef _C2ATS_GETSET_GEN_H_
+#define _C2ATS_GETSET_GEN_H_
 static inline int struct_foo_ptr_get_x (struct foo *obj) { return obj->x ; }
 static inline void struct_foo_ptr_set_x (struct foo *obj, int x) { obj->x = x; }
 static inline void* struct_foo_ptr_get_p (struct foo *obj) { return obj->p ; }
 static inline void struct_foo_ptr_set_p (struct foo *obj, void *v) { obj->p = v; }
 static inline void* struct_foo_ptr_get_pp (struct foo *obj) { return obj->pp ; }
 static inline void struct_foo_ptr_set_pp (struct foo *obj, void *v) { obj->pp = v; }
+
 static inline int struct_bar_ptr_get_x (struct bar *obj) { return obj->x ; }
 static inline void struct_bar_ptr_set_x (struct bar *obj, int v) { obj->x = v; }
 static inline void* struct_bar_ptr_get_p (struct bar *obj) { return obj->p ; }
 static inline void struct_bar_ptr_set_p (struct bar *obj, void *v) { obj->p = v; }
-#endif /* _STRUCT_GEN_AUTO_H_ */
+#endif /* _C2ATS_GETSET_GEN_H_ */
 %}
 
-// access
+// getter/setter in ATS
 fun struct_foo_ptr_get_x: (!aPtr1(struct_foo)) -> int = "mac#"
 fun struct_foo_ptr_set_x: (!aPtr1(struct_foo), int) -> void = "mac#"
 fun struct_foo_ptr_get_p: (!aPtr1(struct_foo)) -> aPtr0(struct_bar) = "mac#"
