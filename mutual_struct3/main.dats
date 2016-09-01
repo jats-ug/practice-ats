@@ -34,13 +34,15 @@ fun print_foobar (pfoo: !aPtr1(struct_foo)): void = {
   prval () = $UN.cast2void(pfoo_pp)
 }
 and print_bar (pbar: !aPtr1(struct_bar)): void = {
-  val () = println! ("bar x=", pbar.x(), " p=", $UN.castvwtp0{ptr}(pbar.p()))
   val pfoo = pbar.p()
+  val () = println! ("bar x=", pbar.x(), " p=", aptr2ptr pfoo)
   val () = if isneqz(pfoo) then print_foo pfoo
   prval () = $UN.cast2void(pfoo)
 }
 and print_foo (pfoo: !aPtr1(struct_foo)): void = {
-  val () = println! ("foo x=", pfoo.x(), " p=", $UN.castvwtp0{ptr}(pfoo.p()))
+  val pbar = pfoo.p()
+  val () = println! ("foo x=", pfoo.x(), " p=", aptr2ptr pbar)
+  prval () = $UN.cast2void(pbar)
 }
 
 implement main0 () = {
