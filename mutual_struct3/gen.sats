@@ -10,6 +10,7 @@ struct foo {
 struct bar {
   int x;
   struct foo *p;
+  struct foo f;
 };
 #endif /* _STRUCT_GEN_H_ */
 %}
@@ -23,6 +24,7 @@ vtypedef struct_c2ats_foo = $extype_struct "struct foo" of {
 vtypedef struct_c2ats_bar = $extype_struct "struct bar" of {
   x= int
 , p= ptr // struct foo *
+, f= struct_c2ats_foo
 }
 
 // getter/setter in C
@@ -40,6 +42,8 @@ static inline int struct_c2ats_bar_get_x (struct bar *obj) { return obj->x ; }
 static inline void struct_c2ats_bar_set_x (struct bar *obj, int v) { obj->x = v; }
 static inline void* struct_c2ats_bar_get_p (struct bar *obj) { return obj->p ; }
 static inline void struct_c2ats_bar_set_p (struct bar *obj, void *v) { obj->p = v; }
+static inline struct foo struct_c2ats_bar_get_f (struct bar *obj) { return obj->f ; }
+static inline void struct_c2ats_bar_set_f (struct bar *obj, struct foo v) { obj->f = v; }
 #endif /* _C2ATS_GETSET_GEN_H_ */
 %}
 
@@ -61,7 +65,11 @@ fun struct_c2ats_bar_get_x: (!aPtr1(struct_c2ats_bar)) -> int = "mac#"
 fun struct_c2ats_bar_set_x: (!aPtr1(struct_c2ats_bar), int) -> void = "mac#"
 fun struct_c2ats_bar_get_p: (!aPtr1(struct_c2ats_bar)) -> aPtr0(struct_c2ats_foo) = "mac#"
 fun struct_c2ats_bar_set_p: (!aPtr1(struct_c2ats_bar), !aPtr1(struct_c2ats_foo)) -> void = "mac#"
+fun struct_c2ats_bar_get_f: (!aPtr1(struct_c2ats_bar)) -> struct_c2ats_foo = "mac#"
+fun struct_c2ats_bar_set_f: (!aPtr1(struct_c2ats_bar), struct_c2ats_foo) -> void = "mac#"
 overload .x with struct_c2ats_bar_get_x
 overload .x with struct_c2ats_bar_set_x
 overload .p with struct_c2ats_bar_get_p
 overload .p with struct_c2ats_bar_set_p
+overload .f with struct_c2ats_bar_get_f
+overload .f with struct_c2ats_bar_set_f

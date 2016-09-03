@@ -16,6 +16,11 @@ fun init_foobar (pfoo: ptr, pbar: ptr, ppbar: ptr): (aPtr1(struct_c2ats_foo), aP
   val () = pfoo.pp(ppbar)
   val () = pbar.x(20)
   val () = pbar.p(pfoo)
+  var foo: struct_c2ats_foo
+  val () = foo.x := 30
+  val () = foo.p := the_null_ptr
+  val () = foo.pp := the_null_ptr
+  val () = pbar.f(foo)
   val ret = (pfoo, pbar)
   prval () = $UN.cast2void(ppbar)
 }
@@ -34,7 +39,8 @@ fun print_foobar (pfoo: !aPtr1(struct_c2ats_foo)): void = {
 }
 and print_bar (pbar: !aPtr1(struct_c2ats_bar)): void = {
   val pfoo = pbar.p()
-  val () = println! ("bar x=", pbar.x(), " p=", aptr2ptr pfoo)
+  val foo = pbar.f()
+  val () = println! ("bar x=", pbar.x(), " p=", aptr2ptr pfoo, " f.x=", foo.x)
   val () = if isneqz(pfoo) then print_foo pfoo
   prval () = $UN.cast2void(pfoo)
 }
