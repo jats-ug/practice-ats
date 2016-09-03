@@ -8,11 +8,14 @@ fun init_foobar {l1,l2,l3:agz} (pffoo: !struct_foo? @ l1 >> struct_foo @ l1,
                              pfbar: !struct_bar? @ l2 >> struct_bar @ l2,
                              pfbarptr: !(ptr l2)@l3 |
                              pfoo: ptr l1, pbar: ptr l2, pbarptr: ptr l3): void = {
-  val () = pfoo->b  := 10
-  val () = pfoo->p  := pbar // danger!
-  val () = pfoo->pp := pbarptr // danger!
-  val () = pbar->a  := 20
-  val () = pbar->p  := pfoo // danger!
+  val () = pfoo->b    := 10
+  val () = pfoo->p    := pbar // danger!
+  val () = pfoo->pp   := pbarptr // danger!
+  val () = pbar->a    := 20
+  val () = pbar->p    := pfoo // danger!
+  val () = pbar->f.b  := 30
+  val () = pbar->f.p  := the_null_ptr // danger!
+  val () = pbar->f.pp := the_null_ptr // danger!
 }
 
 fun print_foobar {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
@@ -25,7 +28,7 @@ fun print_foobar {l:agz} (pffoo: !struct_foo @ l | pfoo: ptr l): void = {
 }
 and print_bar {l:agz} (pfbar: !struct_bar @ l | pbar: ptr l): void = {
   val (pffoo, fpffoo | pfoo) = take_struct_bar_p (pfbar | pbar)
-  val () = println! ("bar a=", pbar->a, " p=", pbar->p)
+  val () = println! ("bar a=", pbar->a, " p=", pbar->p, " f.b=", pbar->f.b)
   val () = if pfoo > 0 then print_foo (pffoo | pfoo)
   prval () = fpffoo pffoo
 }

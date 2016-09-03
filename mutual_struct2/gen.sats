@@ -10,6 +10,7 @@ struct foo {
 struct bar {
   int a;
   struct foo *p;
+  struct foo f;
 };
 #endif /* _STRUCT_GEN_H_ */
 %}
@@ -36,7 +37,8 @@ typedef struct_foo = $extype_struct"struct foo" of {
 }
 typedef struct_bar = $extype_struct"struct bar" of {
   a = int,
-  p = [l:addr] ptr l
+  p = [l:addr] ptr l,
+  f = struct_foo
 }
 
 // access
