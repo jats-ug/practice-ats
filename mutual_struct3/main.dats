@@ -7,10 +7,10 @@ staload UN = "prelude/SATS/unsafe.sats"
 staload "gen.sats"
 
 // Should be user code
-fun init_foobar (pfoo: ptr, pbar: ptr, ppbar: ptr): (aPtr1(struct_foo), aPtr1(struct_bar)) = ret where {
-  val pfoo = $UN.castvwtp0{aPtr1(struct_foo)}(pfoo) // Danger! It's unsafe cast.
-  val pbar = $UN.castvwtp0{aPtr1(struct_bar)}(pbar) // Danger! It's unsafe cast.
-  val ppbar = $UN.castvwtp0{aPtr1(aPtr1(struct_bar))}(ppbar) // Danger! It's unsafe cast.
+fun init_foobar (pfoo: ptr, pbar: ptr, ppbar: ptr): (aPtr1(struct_c2ats_foo), aPtr1(struct_c2ats_bar)) = ret where {
+  val pfoo = $UN.castvwtp0{aPtr1(struct_c2ats_foo)}(pfoo) // Danger! It's unsafe cast.
+  val pbar = $UN.castvwtp0{aPtr1(struct_c2ats_bar)}(pbar) // Danger! It's unsafe cast.
+  val ppbar = $UN.castvwtp0{aPtr1(aPtr1(struct_c2ats_bar))}(ppbar) // Danger! It's unsafe cast.
   val () = pfoo.x(10)
   val () = pfoo.p(pbar)
   val () = pfoo.pp(ppbar)
@@ -20,7 +20,7 @@ fun init_foobar (pfoo: ptr, pbar: ptr, ppbar: ptr): (aPtr1(struct_foo), aPtr1(st
   prval () = $UN.cast2void(ppbar)
 }
 
-fun print_foobar (pfoo: !aPtr1(struct_foo)): void = {
+fun print_foobar (pfoo: !aPtr1(struct_c2ats_foo)): void = {
   val pbar = pfoo.p()
   val () = if isneqz(pbar) then print_bar pbar
   prval () = $UN.cast2void(pbar)
@@ -32,21 +32,21 @@ fun print_foobar (pfoo: !aPtr1(struct_foo)): void = {
   }
   prval () = $UN.cast2void(pfoo_pp)
 }
-and print_bar (pbar: !aPtr1(struct_bar)): void = {
+and print_bar (pbar: !aPtr1(struct_c2ats_bar)): void = {
   val pfoo = pbar.p()
   val () = println! ("bar x=", pbar.x(), " p=", aptr2ptr pfoo)
   val () = if isneqz(pfoo) then print_foo pfoo
   prval () = $UN.cast2void(pfoo)
 }
-and print_foo (pfoo: !aPtr1(struct_foo)): void = {
+and print_foo (pfoo: !aPtr1(struct_c2ats_foo)): void = {
   val pbar = pfoo.p()
   val () = println! ("foo x=", pfoo.x(), " p=", aptr2ptr pbar)
   prval () = $UN.cast2void(pbar)
 }
 
 implement main0 () = {
-  var foo: struct_foo
-  var bar: struct_bar
+  var foo: struct_c2ats_foo
+  var bar: struct_c2ats_bar
   var pbar = addr@bar
   val (pfoo, pbar) = init_foobar (addr@foo, addr@bar, addr@pbar)
   prval () = $UN.cast2void(pbar)
