@@ -16,6 +16,18 @@ struct bar {
 %}
 
 // Should be semi-automatically generated code
+// struct foo/bar
+typedef struct_foo = $extype_struct"struct foo" of {
+  b =  int,
+  p =  ptr,
+  pp = ptr
+}
+typedef struct_bar = $extype_struct"struct bar" of {
+  a = int,
+  p = ptr,
+  f = struct_foo
+}
+
 // pre define
 %{#
 #ifndef _STRUCT_GEN_AUTO_H_
@@ -25,21 +37,6 @@ static inline struct bar **take_struct_foo_pp(struct foo *p) { return p->pp; }
 static inline struct foo *take_struct_bar_p(struct bar *p) { return p->p; }
 #endif /* _STRUCT_GEN_AUTO_H_ */
 %}
-
-absvtype struct_foo_ptr(l:addr) = ptr l
-absvtype struct_bar_ptr(l:addr) = ptr l
-
-// struct foo/bar
-typedef struct_foo = $extype_struct"struct foo" of {
-  b =  int,
-  p =  [l:addr] ptr l,
-  pp = [l:addr] ptr l
-}
-typedef struct_bar = $extype_struct"struct bar" of {
-  a = int,
-  p = [l:addr] ptr l,
-  f = struct_foo
-}
 
 // access
 fun take_struct_foo_p: {l1:agz} (!struct_foo @ l1 | ptr l1) -> [l2:addr] (struct_bar @ l2, struct_bar @ l2 -<lin,prf> void | ptr l2) = "mac#"
