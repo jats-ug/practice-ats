@@ -37,8 +37,7 @@ implement main0 () = {
   var i: int = 0
   var pi = addr@i
   prval ppvi = pptr_v_cons (view@pi, pptr_v_nil (view@i))
-  prval pptr_v_cons (pfat1, ppvi1) = ppvi
-  prval pptr_v_nil pfat2 = ppvi1
+  prval pptr_v_cons (pfat1, pptr_v_nil pfat2) = ppvi
   prval () = view@pi := pfat1
   prval () = view@i := pfat2
 
