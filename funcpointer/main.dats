@@ -20,7 +20,18 @@ typedef struct_c2ats_dirent = $extype_struct"struct dirent" of {
   d_name = @[char][256]
 }
 
-extern fun fun_c2ats_scandir1: {l1,l2:addr} (cPtr0(cPtr0(struct_c2ats_dirent)) @ l1, char @ l2 | {l1,l2:addr} (cPtr0(struct_c2ats_dirent) @ l1, cPtr0(struct_c2ats_dirent) @ l2 | ptr l1, ptr l2) -> int, {l1:addr} (struct_c2ats_dirent @ l1 | ptr l1) -> int, ptr l1, ptr l2) -> int = "mac#scandir"
+(*
+extern int scandir (const char *__restrict __dir,
+      struct dirent ***__restrict __namelist,
+      int (*__selector) (const struct dirent *),
+      int (*__cmp) (const struct dirent **,
+      const struct dirent **))
+     __attribute__ ((__nonnull__ (1, 2)));
+*)
+extern fun fun_c2ats_scandir:
+  {l1,l2:addr} (cPtr0(cPtr0(struct_c2ats_dirent)) @ l1, char @ l2 |
+  {l1,l2:addr} (cPtr0(struct_c2ats_dirent) @ l1, cPtr0(struct_c2ats_dirent) @ l2 | ptr l1, ptr l2) -> int,
+  {l1:addr} (struct_c2ats_dirent @ l1 | ptr l1) -> int, ptr l1, ptr l2) -> int = "mac#scandir"
 
 implement main0 () = {
 }
