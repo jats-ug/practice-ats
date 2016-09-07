@@ -24,23 +24,22 @@ fun call_may_ret_null1 (): void = {
   val (pfat | p) = may_ret_null1 0
 //  val () = println! !p // => SEGV at run-time
 //  val () = print_int (my_deref (pfat | p)) // => Error at compile-time
-  val () = if p > 0 then print_int (my_deref (pfat | p))
+  val () = if p > 0 then print_int (my_deref (pfat | p)) // => Safe
   val () = consume_ret_null1 (pfat | p)
   //
   val (pfat | p) = may_ret_null1 1
-  val () = println! !p
-  val () = if p > 0 then print_int (my_deref (pfat | p))
+  val () = println! !p // => Danger!
+  val () = if p > 0 then print_int (my_deref (pfat | p)) // => Safe
   val () = consume_ret_null1 (pfat | p)
   val () = println! ""
 }
 
 fun call_may_ret_null2 (): void = {
-  // may_ret_null2
   val (pfopt | p) = may_ret_null2 0
+//  val () = println! !p // => Error at compile-time
   val () = if p > 0 then {
     prval Some_v (pfat) = pfopt
-    val () = println! !p
-    val () = print_int (my_deref (pfat | p))
+    val () = print_int (my_deref (pfat | p)) // => Safe
     prval () = pfopt := Some_v (pfat)
   }
   val () = consume_ret_null2 (pfopt | p)
@@ -48,8 +47,8 @@ fun call_may_ret_null2 (): void = {
   val (pfopt | p) = may_ret_null2 1
   val () = if p > 0 then {
     prval Some_v (pfat) = pfopt
-    val () = println! !p
-    val () = print_int (my_deref (pfat | p))
+    val () = println! !p // => Safe
+    val () = print_int (my_deref (pfat | p)) // => Safe
     prval () = pfopt := Some_v (pfat)
   }
   val () = consume_ret_null2 (pfopt | p)
