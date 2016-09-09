@@ -20,6 +20,10 @@ fun do_unlock {s:nat} (pf: !lock(s) >> lock(s-1) | ):void = {
   // Do detail
 }
 
+fun foo {s:nat} (pf: !lock(s) >> lock(s-1) | ):void = {
+  // Do something
+  val () = do_unlock (pf | )
+}
 
 implement main0 () = {
   prval pflock = init_lock ()
@@ -27,6 +31,6 @@ implement main0 () = {
   val () = do_lock (pflock | )
   // Critical Region
   val () = do_unlock (pflock | )
-  val () = do_unlock (pflock | )
+  val () = if grandom_int() = 0 then foo (pflock | ) else do_unlock (pflock | )
   prval () = fini_lock pflock
 }
