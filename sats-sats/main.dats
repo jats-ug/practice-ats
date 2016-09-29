@@ -2,7 +2,6 @@
 #include "share/atspre_staload.hats"
 
 staload "a.sats"
-staload "b.sats"
 
 implement main0 () = {
   var f: foo

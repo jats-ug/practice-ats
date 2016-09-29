@@ -1,1 +1,1 @@
-staload "b.sats"
+#include "b.sats"
