@@ -18,4 +18,4 @@ fn sum {m:nat}(x : int(m)) :<!wrt> int =
   end
 
 implement main0 () =
-  println! (sum(800000000))
+  assertloc (sum(800000000) = 267879424)

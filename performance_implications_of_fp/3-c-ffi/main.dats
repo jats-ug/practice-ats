@@ -16,4 +16,4 @@ fn sum(intGte(0)) :<> intGte(0) =
   "mac#"
 
 implement main0 () =
-  println! (sum(800000000))
+  assertloc (sum(800000000) = 267879424)

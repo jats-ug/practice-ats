@@ -3,15 +3,15 @@
 
 fn sum {m:nat}(x : int(m)) :<!wrt> int =
   let
-    fun loop {n:nat} .<n>. (y : int(n), res : &int? >> int) :<!wrt> void =
+    fun loop {n:nat} .<n>. (y : int(n), res : &int) :<!wrt> void =
       case+ y of
-        | 0 => res := 0
-        | n =>> (loop(y - 1, res) ; res := res + y)
-    var res: int
+        | 0 => ()
+        | n =>> (res := res + y ; loop(y - 1, res))
+    var res: int = 0
     val () = loop(x, res)
   in
     res
   end
 
 implement main0 () =
-  println! (sum(800000000))
+  assertloc (sum(800000000) = 267879424)

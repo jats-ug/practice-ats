@@ -40,4 +40,4 @@ fn sum (x : intGte(0)) : int =
   end
 
 implement main0 () =
-  println! (sum(800000000))
+  assertloc (sum(800000000) = 267879424)
