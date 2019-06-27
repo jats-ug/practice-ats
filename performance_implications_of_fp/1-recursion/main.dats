@@ -1,13 +1,15 @@
 #include "share/atspre_define.hats"
 #include "share/atspre_staload.hats"
 
-fun sum_r {m:nat} .<m>. (x : int(m), s : int) :<> int =
-  case+ x of
-    | 0 => s
-    | n =>> sum_r(x - 1, s + x)
-
 fun sum {m:nat} .<m>. (x : int(m)) :<> int =
-  sum_r (x, 0)
+  let
+    fun loop {m:nat} .<m>. (y : int(m), res : int) :<> int =
+      case+ y of
+        | 0 => res
+        | n =>> loop(y - 1, res + y)
+  in
+    loop (x, 0)
+  end
 
 implement main0 () =
   println! (sum(800000000))
