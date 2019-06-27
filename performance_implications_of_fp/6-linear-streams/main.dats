@@ -7,12 +7,12 @@ fn sum {m:nat}(x : int(m)) :<!ntm> int =
       case+ y of
         | 0 => $ldelay(stream_vt_nil)
         | n =>> $ldelay(stream_vt_cons(y, build_stream(y - 1)))
-    fun fold_stream(xs : stream_vt(int)) :<!ntm> int =
+    fun fold_stream(xs : stream_vt(int), res : int) :<!ntm> int =
       case+ !xs of
-        | ~stream_vt_nil() => 0
-        | ~stream_vt_cons (y, ys) => y + fold_stream(ys)
+        | ~stream_vt_nil() => res
+        | ~stream_vt_cons (y, ys) => fold_stream(ys, res + y)
   in
-    fold_stream(build_stream(x))
+    fold_stream(build_stream(x), 0)
   end
 
 implement main0 () =
