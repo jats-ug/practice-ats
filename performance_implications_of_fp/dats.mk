@@ -1,7 +1,7 @@
 all: a.out
 
 a.out: main.dats
-	patscc -o $@ $< -DATS_MEMALLOC_LIBC
+	patscc -O2 -o $@ $< -DATS_MEMALLOC_LIBC
 
 run: all
 	@echo "===" `pwd`
