@@ -12,4 +12,4 @@ fun sum {m:nat} .<m>. (x : int(m)) :<> int =
   end
 
 implement main0 () =
-  assertloc (sum(800000000) = 267879424)
+  println! (sum(2000000000))
