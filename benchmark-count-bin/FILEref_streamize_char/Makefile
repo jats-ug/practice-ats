@@ -1,7 +1,7 @@
 all: a.out
 
 a.out: main.dats
-	tempacc $(OPT) -o $@ $< -DATS_MEMALLOC_LIBC
+	tempacc -g $(OPT) -o $@ $< -DATS_MEMALLOC_LIBC
 
 run: all ../random.img
 	@echo "===" `pwd`

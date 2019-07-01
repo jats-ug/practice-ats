@@ -1,7 +1,7 @@
 all: a.out
 
 a.out: main.c
-	gcc $(OPT) -o $@ $<
+	gcc -g $(OPT) -o $@ $<
 
 run: all ../random.img
 	@echo "===" `pwd`
