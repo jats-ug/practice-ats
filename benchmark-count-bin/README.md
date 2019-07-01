@@ -1,7 +1,5 @@
 # Benchmark fgetc
 
-Copry from http://blog.vmchale.com/article/ats-performance .
-
 ## Conclusion
 
 Simple tail recursion in ATS-Postiats is faster than stream in ATS-Temptory.
