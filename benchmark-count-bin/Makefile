@@ -1,4 +1,4 @@
-SUBDIRS := FILEref_streamize_char/
+SUBDIRS := C/ FILEref_streamize_char/
 
 all run clean: random.img
 	$(foreach i,$(SUBDIRS),$(MAKE) -C $i $@ &&) true
