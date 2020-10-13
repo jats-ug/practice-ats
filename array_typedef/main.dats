@@ -8,10 +8,11 @@
 
 #define MAXPATHLEN 1024
 
-typedef kld_file_stat = @{ version = int, name = @[char][MAXPATHLEN] }
+typedef kld_file_stat = @{ version = int, name = @[char][MAXPATHLEN], refs = int }
 
 fun kern_kldstat {l:addr} (pf: !kld_file_stat @ l | p: ptr l): int = 0 where {
   val () = !p.name.[0] := 'A'
+  val () = !p.refs := 1
 }
 
 implement main0 () = {
