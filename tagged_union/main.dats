@@ -26,7 +26,7 @@ fun wg_input
 {l1,l2:addr}
 (pfe: !wg_endpoint@l1, pfso: !sockaddr@l2 | e: ptr l1, so: ptr l2):
 void = let
-    val () = !e.e_remote := so
+    val () = !e.e_remote := !so
   in
     ()
   end
