@@ -26,6 +26,10 @@ vtypedef wg_endpoint = [i:int] @{
 }
 
 fun wg_input {l1,l2:addr}{i:int} (pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | e: ptr l1, so: ptr l2): void = let
+    val so = scase i of
+      | AF_INET => so
+      | AF_INET6 => so
+      | _ => null
     val () = !e.e_remote := so
   in
     ()
