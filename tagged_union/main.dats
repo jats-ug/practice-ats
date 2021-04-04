@@ -21,17 +21,16 @@ datavtype sockaddr (sa_family: int) =
 | Af_inet (AF_INET) of sockaddr_in
 | Af_inet6 (AF_INET6) of sockaddr_in6
 
-vtypedef wg_endpoint (sa_family: int) = @{
-  e_remote = sockaddr sa_samily
+vtypedef wg_endpoint = [i:int] @{
+  e_remote = sockaddr(i)
 }
 
-fun wg_input {l:addr}{i:int} (pf: wg_endpoint(i)@l | e: ptr l): void = let
-    var so: sockaddr(AF_INET6)
+fun wg_input {l1,l2:addr}{i:int} (pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | e: ptr l1, so: ptr l2): void = let
     val () = !e.e_remote := so
   in
     ()
   end
 
 implement main0 () = {
-  var e: wg_endpoint(AF_INET6)
+  var e: wg_endpoint
 }
