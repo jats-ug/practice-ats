@@ -37,4 +37,10 @@ fun wg_input {l1,l2:addr}{i:int} (pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | 
 
 implement main0 () = {
   var e: wg_endpoint
+  var so: sockaddr(AF_INET6)
+  prval pre = view@e
+  prval prso = view@so
+//  val () = wg_input(pre, prso | e, so)
+  prval () = view@e := pre
+  prval () = view@so := prso
 }
