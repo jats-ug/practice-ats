@@ -1,8 +1,8 @@
 #include "share/atspre_define.hats"
 #include "share/atspre_staload.hats"
 
-#define	AF_INET		2		/* internetwork: UDP, TCP, etc. */
-#define	AF_INET6	28		/* IPv6 */
+#define AF_INET  2    /* internetwork: UDP, TCP, etc. */
+#define AF_INET6 28   /* IPv6 */
 
 typedef sockaddr_in = @{
   sin_port = int,
@@ -25,7 +25,10 @@ vtypedef wg_endpoint = [i:int] @{
   e_remote = sockaddr(i)
 }
 
-fun wg_input {l1,l2:addr}{i:int} (pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | e: ptr l1, so: ptr l2): void = let
+fun wg_input
+{l1,l2:addr}{i:int}
+(pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | e: ptr l1, so: ptr l2):
+void = let
     val so = scase i of
       | AF_INET => so
       | AF_INET6 => so
