@@ -1,9 +1,6 @@
 #include "share/atspre_define.hats"
 #include "share/atspre_staload.hats"
 
-#define AF_INET  2    /* internetwork: UDP, TCP, etc. */
-#define AF_INET6 28   /* IPv6 */
-
 typedef sockaddr_in = @{
   sin_port = int,
   sin_addr = int,
@@ -17,22 +14,18 @@ typedef sockaddr_in6 = @{
   sin6_scope_id = int
 }
 
-datavtype sockaddr (sa_family: int) =
-| Af_inet (AF_INET) of sockaddr_in
-| Af_inet6 (AF_INET6) of sockaddr_in6
+datavtype sockaddr =
+| Af_inet of sockaddr_in
+| Af_inet6 of sockaddr_in6
 
-vtypedef wg_endpoint = [i:int] @{
-  e_remote = sockaddr(i)
+vtypedef wg_endpoint = @{
+  e_remote = sockaddr
 }
 
 fun wg_input
-{l1,l2:addr}{i:int}
-(pfe: !wg_endpoint@l1, pfso: !sockaddr(i)@l2 | e: ptr l1, so: ptr l2):
+{l1,l2:addr}
+(pfe: !wg_endpoint@l1, pfso: !sockaddr@l2 | e: ptr l1, so: ptr l2):
 void = let
-    val so = scase i of
-      | AF_INET => so
-      | AF_INET6 => so
-      | _ => null
     val () = !e.e_remote := so
   in
     ()
@@ -40,7 +33,7 @@ void = let
 
 implement main0 () = {
   var e: wg_endpoint
-  var so: sockaddr(AF_INET6)
+  var so: sockaddr
   prval pre = view@e
   prval prso = view@so
 //  val () = wg_input(pre, prso | e, so)
