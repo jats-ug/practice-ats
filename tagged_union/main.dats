@@ -47,13 +47,13 @@ implement main0 () = {
     sin6_scope_id = 4
   }
 
-  prval () = uninitize(e)
-
   prval pre = view@e
   prval prso = view@so
   val () = wg_input(pre, prso | addr@e, addr@so)
   prval () = view@e := pre
   prval () = view@so := prso
+
+  prval () = uninitize(e)
 
   prval pre = view@e
   prval prso6 = view@so6
