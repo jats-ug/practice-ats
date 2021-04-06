@@ -24,7 +24,7 @@ vtypedef wg_endpoint = @{
 
 fun wg_input
 {l1,l2:addr}
-(pfe: !wg_endpoint@l1, pfso: !sockaddr@l2 | e: ptr l1, so: ptr l2):
+(pfe: !wg_endpoint? @ l1 >> wg_endpoint @ l1, pfso: !sockaddr@l2 | e: ptr l1, so: ptr l2):
 void = let
     val () = !e.e_remote := !so
   in
@@ -33,10 +33,16 @@ void = let
 
 implement main0 () = {
   var e: wg_endpoint
-  var so: sockaddr
+  var so: sockaddr = Af_inet6 @{
+    sin6_port = 1,
+    sin6_flowinfo = 2,
+    sin6_addr = 3,
+    sin6_scope_id = 4
+  }
+
   prval pre = view@e
   prval prso = view@so
-//  val () = wg_input(pre, prso | addr@e, addr@so)
+  val () = wg_input(pre, prso | addr@e, addr@so)
   prval () = view@e := pre
   prval () = view@so := prso
 }
