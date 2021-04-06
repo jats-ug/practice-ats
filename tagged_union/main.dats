@@ -22,6 +22,8 @@ vtypedef wg_endpoint = @{
   e_remote = sockaddr
 }
 
+extern praxi uninitize {a:t0ype} (x: &INV(a) >> a?): void
+
 fun wg_input
 {l1,l2:addr}
 (pfe: !wg_endpoint? @ l1 >> wg_endpoint @ l1, pfso: !sockaddr@l2 | e: ptr l1, so: ptr l2):
@@ -44,6 +46,8 @@ implement main0 () = {
     sin6_addr = 3,
     sin6_scope_id = 4
   }
+
+  prval () = uninitize(e)
 
   prval pre = view@e
   prval prso = view@so
