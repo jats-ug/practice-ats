@@ -14,7 +14,7 @@ typedef sockaddr_in6 = @{
   sin6_scope_id = int
 }
 
-datavtype sockaddr =
+datatype sockaddr =
 | Af_inet of sockaddr_in
 | Af_inet6 of sockaddr_in6
 
@@ -36,7 +36,7 @@ implement main0 () = {
   var so: sockaddr
   prval pre = view@e
   prval prso = view@so
-//  val () = wg_input(pre, prso | e, so)
+//  val () = wg_input(pre, prso | addr@e, addr@so)
   prval () = view@e := pre
   prval () = view@so := prso
 }
