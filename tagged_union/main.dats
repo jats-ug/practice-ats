@@ -33,7 +33,12 @@ void = let
 
 implement main0 () = {
   var e: wg_endpoint
-  var so: sockaddr = Af_inet6 @{
+  var so: sockaddr = Af_inet @{
+    sin_port = 1,
+    sin_addr = 2,
+    sin_zero = 3
+  }
+  var so6: sockaddr = Af_inet6 @{
     sin6_port = 1,
     sin6_flowinfo = 2,
     sin6_addr = 3,
@@ -45,4 +50,10 @@ implement main0 () = {
   val () = wg_input(pre, prso | addr@e, addr@so)
   prval () = view@e := pre
   prval () = view@so := prso
+
+  prval pre = view@e
+  prval prso6 = view@so6
+  val () = wg_input(pre, prso6 | addr@e, addr@so6)
+  prval () = view@e := pre
+  prval () = view@so6 := prso6
 }
